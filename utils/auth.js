@@ -19,7 +19,7 @@ export async function auth(ctx) {
   }
 
   const { data } = await axios
-    .get("http://localhost:1337/users/me", {
+    .get("https://arcane-everglades-49934.herokuapp.com/users/me", {
       headers: {
         Authorization: `Bearer ${token}`
       }
