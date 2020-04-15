@@ -25,6 +25,7 @@ yarn-error.log*
 
 # node
 package-lock.json
+yarn.lock
 
 # local env files
 .env.local
