@@ -5,6 +5,7 @@ export default () => {
   return (
     <PageWrapper>
       <div>
+        <Form />
       </div>
     </PageWrapper>
   );

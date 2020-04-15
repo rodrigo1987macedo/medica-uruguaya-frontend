@@ -16,7 +16,7 @@ function Form() {
     setErrorMessage("")
     trackPromise(
       axios
-        .post("https://arcane-everglades-49934.herokuapp.com/auth/local", {
+        .post("http://localhost:1337/auth/local", {
           identifier: userIdentifier,
           password: userPassword
         })
