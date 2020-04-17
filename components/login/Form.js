@@ -70,7 +70,7 @@ function Form() {
       </>
       <button onClick={() => handleSubmit()}>Login</button>
       <Loader />
-      {errorMessage && <div>errorMessage</div>}
+      {errorMessage && <div>{errorMessage}</div>}
     </>
   );
 }
