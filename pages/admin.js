@@ -41,7 +41,7 @@ const Tab = styled.div`
 const cookies = new Cookies();
 
 function Admin({ data }) {
-  const [currentTab, setCurrentTab] = useState(tabs.LOAD);
+  const [currentTab, setCurrentTab] = useState(tabs.CREATE);
 
   function logout() {
     cookies.remove("guards");

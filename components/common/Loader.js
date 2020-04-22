@@ -1,21 +1,21 @@
 import React from "react";
 import { usePromiseTracker } from "react-promise-tracker";
-import styled from 'styled-components'
+import styled from "styled-components";
 
 const LoaderWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-`
+  position: relative;
+  height: 30px;
+  > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+`;
 
 function Loader() {
   const { promiseInProgress } = usePromiseTracker();
   return (
-    promiseInProgress && (
-      <LoaderWrapper>
-        Cargando...
-      </LoaderWrapper>
-    )
+    <LoaderWrapper>{promiseInProgress && <div>Cargando...</div>}</LoaderWrapper>
   );
 }
 

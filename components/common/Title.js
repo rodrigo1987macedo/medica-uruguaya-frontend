@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const TitleWrapper = styled.h1`
+const TitleWrapper = styled.div`
   margin: 0 0 20px 0;
   padding: 0;
   color: ${props => props.theme.colors.primary};
@@ -10,8 +10,8 @@ const TitleWrapper = styled.h1`
   text-transform: uppercase;
 `;
 
-function Title({ text }) {
-  return <TitleWrapper>{text}</TitleWrapper>;
+function Title({ text, tag }) {
+  return <TitleWrapper as={tag}>{text}</TitleWrapper>;
 }
 
 export default Title;

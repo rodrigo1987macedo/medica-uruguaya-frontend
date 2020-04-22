@@ -1,62 +1,19 @@
-import React, { useState } from "react";
 import axios from "axios";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { status } from "../../constants/status";
+import { table } from "../../constants/table";
+import { tabs } from "../../constants/tabs";
+import { Button } from "../../styles/Button";
+import History from "../admin/History";
 import Loader from "../common/Loader";
 import Title from "../common/Title";
-import { tabs } from "../../constants/tabs";
-import { Button } from '../../styles/Button'
-
-const FilesDisplayHeading = styled.div`
-  display: flex;
-  border: 1px solid ${props => props.theme.colors.border1};
-  padding: 8px;
-  background: ${props => props.theme.colors.background1};
-`;
-
-const FilesDisplay = styled.div`
-  display: flex;
-  width: 100%;
-  margin: 20px 0 0 0;
-  padding: 20px 0 0 0;
-  border-top: 1px solid ${props => props.theme.colors.border2};
-  > div:nth-child(1) {
-    flex: 0 0 200px;
-  }
-  > div:nth-child(2) {
-    flex: 1;
-  }
-`;
 
 const Input = styled.input`
   padding: 4px 10px;
   height: 30px;
   width: 250px;
 `;
-
-const FilesToBeLoaded = styled.div`
-  border-bottom: 1px solid ${props => props.theme.colors.border1};
-  padding: 14px 8px;
-`;
-
-const FilesStatus = styled.div`
-  border-bottom: 1px solid ${props => props.theme.colors.border1};
-  padding: 14px 8px;
-  color: ${props =>
-    props.status === status.READY
-      ? "inherit"
-      : props.status === status.PENDING
-      ? props.theme.colors.process
-      : props.status === status.SUCCESS
-      ? props.theme.colors.success
-      : props.status === status.ERROR && props.theme.colors.error};
-`;
-
-const status = {
-  READY: "Listo para cargar",
-  PENDING: "Cargando...",
-  SUCCESS: "Cargado con éxito",
-  ERROR: "Ha ocurrido un error"
-};
 
 function LoadFiles() {
   const [filesToBeLoaded, setFilesToBeLoaded] = useState();
@@ -142,33 +99,12 @@ function LoadFiles() {
           Cargar archivos
         </Button>
       )}
-      <FilesDisplay>
-        <div>
-          <FilesDisplayHeading>Archivos</FilesDisplayHeading>
-          {filesToBeLoaded &&
-            filesToBeLoaded.map((file, i) => {
-              return (
-                <FilesToBeLoaded key={file + i}>
-                  {file.name
-                    .split(".")
-                    .slice(0, -1)
-                    .join(".")}
-                </FilesToBeLoaded>
-              );
-            })}
-        </div>
-        <div>
-          <FilesDisplayHeading>Estado</FilesDisplayHeading>
-          {filesToBeLoaded &&
-            filesToBeLoadedStatus.map((status, i) => {
-              return (
-                <FilesStatus key={status + i} status={status}>
-                  {status}
-                </FilesStatus>
-              );
-            })}
-        </div>
-      </FilesDisplay>
+        <History
+          data={[
+            { heading: table.FILES, content: filesToBeLoaded },
+            { heading: table.STATE, content: filesToBeLoadedStatus }
+          ]}
+        />
       <Loader />
     </>
   );
