@@ -6,13 +6,19 @@ import { table } from "../../constants/table";
 import { tabs } from "../../constants/tabs";
 import { Button } from "../../styles/Button";
 import History from "../admin/History";
-import Loader from "../common/Loader";
 import Title from "../common/Title";
 
 const Input = styled.input`
   padding: 4px 10px;
   height: 30px;
   width: 250px;
+`;
+
+const FileLoader = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 0 0 30px 0;
+  min-height: 30px;
 `;
 
 function LoadFiles() {
@@ -88,24 +94,33 @@ function LoadFiles() {
 
   return (
     <>
-      <Title text={tabs.LOAD} />
-      {!isLoading && (
-        <Input type="file" onChange={e => handleLoadFileChange(e)} multiple />
-      )}
-      {!isLoading && filesToBeLoaded && (
-        <Button
-          onClick={() => recursiveUploadChain(setFilesArray(filesToBeLoaded))}
-        >
-          Cargar archivos
-        </Button>
-      )}
-        <History
-          data={[
-            { heading: table.FILES, content: filesToBeLoaded },
-            { heading: table.STATE, content: filesToBeLoadedStatus }
-          ]}
-        />
-      <Loader />
+      <Title text={tabs.LOAD} tag="h1" />
+      <FileLoader>
+        {!isLoading ? (
+          <div>
+            <Input
+              type="file"
+              onChange={e => handleLoadFileChange(e)}
+              multiple
+            />
+            <Button
+              onClick={() =>
+                recursiveUploadChain(setFilesArray(filesToBeLoaded))
+              }
+            >
+              Cargar archivos
+            </Button>
+          </div>
+        ) : (
+          <div>Procesando...</div>
+        )}
+      </FileLoader>
+      <History
+        data={[
+          { heading: table.FILES, content: filesToBeLoaded },
+          { heading: table.STATE, content: filesToBeLoadedStatus }
+        ]}
+      />
     </>
   );
 }

@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { trackPromise } from "react-promise-tracker";
-import Loader from "../common/Loader";
 import Title from "../common/Title";
 import { tabs } from "../../constants/tabs";
 import { Button } from "../../styles/Button";
@@ -29,7 +28,7 @@ function ModifyUser() {
 
   return (
     <>
-      <Title text={tabs.MODIFY} />
+      <Title text={tabs.MODIFY} tag="h1" />
       <InputText
         placeholder="Número"
         type="text"
@@ -39,7 +38,6 @@ function ModifyUser() {
       <Button onClick={() => modifyUser(getUserState)} button>
         Buscar usuario
       </Button>
-      <Loader />
     </>
   );
 }

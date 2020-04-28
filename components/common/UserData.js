@@ -3,15 +3,13 @@ import Moment from "react-moment";
 import styled from "styled-components";
 
 const UserDataWrapper = styled.div`
+  display: grid;
+  grid-gap: 5px;
   > div:nth-child(1) {
     font-family: "Alright";
     font-size: 20px;
     text-transform: uppercase;
-    margin: 0 0 8px 0;
     color: ${props => props.theme.colors.primary};
-  }
-  > div:nth-child(n + 1) {
-    margin: 0 0 5px 0;
   }
   a {
     color: ${props => props.theme.colors.primary};
@@ -25,12 +23,12 @@ const EmptyMessage = styled.div`
 function UserData({ userData }) {
   return (
     <UserDataWrapper>
-      <div>#{userData.number}</div>
+      <div>#{userData.number ? userData.number : " -"}</div>
       <div>
-        <b>Nombre:</b> {userData.username ? userData.username : "-"}
+        <b>Nombre:</b> {userData.username ? userData.username : " -"}
       </div>
       <div>
-        <b>Email:</b> {userData.email ? userData.email : "-"}
+        <b>Email:</b> {userData.email ? userData.email : " -"}
       </div>
       {userData.document ? (
         <a href={userData.document.url} download target="_blank">

@@ -1,9 +1,37 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/router";
 import { trackPromise } from "react-promise-tracker";
-import Loader from '../common/Loader'
+import Loader from "../common/Loader";
+import Title from "../common/Title";
+import { Button } from "../../styles/Button";
+import { InputText } from "../../styles/InputText";
+
+const FormWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  input {
+    margin: 0 0 10px 0;
+  }
+  > div {
+    text-align: center;
+    width: 400px;
+    height: 400px;
+    border: 1px solid ${props => props.theme.colors.border2};
+    border-radius: 4px;
+    padding: 30px 14px;
+  }
+`;
+
+const Logo = styled.img`
+  width: 250px;
+  margin: 0;
+`;
 
 function Form() {
   const router = useRouter();
@@ -13,7 +41,7 @@ function Form() {
   const [errorMessage, setErrorMessage] = useState("");
 
   async function handleSubmit() {
-    setErrorMessage("")
+    setErrorMessage("");
     trackPromise(
       axios
         .post("https://arcane-everglades-49934.herokuapp.com/auth/local", {
@@ -47,31 +75,36 @@ function Form() {
   };
 
   return (
-    <>
-      <>
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          onChange={handleIdentifierChange}
-          value={userIdentifier}
-        />
-      </>
-      <>
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          onChange={handlePasswordChange}
-          value={userPassword}
-        />
-      </>
-      <button onClick={() => handleSubmit()}>Login</button>
-      <Loader />
-      {errorMessage && <div>{errorMessage}</div>}
-    </>
+    <FormWrapper>
+      <div>
+        <Title text="Ingresar" tag="h1" />
+        <>
+          <InputText
+            type="email"
+            id="email"
+            name="email"
+            onChange={handleIdentifierChange}
+            value={userIdentifier}
+            placeholder="email"
+          />
+        </>
+        <br />
+        <>
+          <InputText
+            type="password"
+            id="password"
+            name="password"
+            onChange={handlePasswordChange}
+            value={userPassword}
+            placeholder="clave"
+          />
+        </>
+        <br />
+        <Button onClick={() => handleSubmit()}>Ingresar</Button>
+        <Loader error={errorMessage} />
+        <Logo src="logo.png" />
+      </div>
+    </FormWrapper>
   );
 }
 

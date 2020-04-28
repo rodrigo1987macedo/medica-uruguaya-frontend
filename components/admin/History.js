@@ -1,14 +1,12 @@
 import React from "react";
+import Moment from "react-moment";
 import styled from "styled-components";
-import { table } from "../../constants/table";
 import { status } from "../../constants/status";
+import { table } from "../../constants/table";
 
 const HistoryWrapper = styled.div`
   display: flex;
   width: 100%;
-  margin: 20px 0 0 0;
-  padding: 22px 0 0 0;
-  border-top: 1px solid ${props => props.theme.colors.border2};
   > div:nth-child(1) {
     flex: 0 0 200px;
   }
@@ -36,15 +34,6 @@ const HistoryContent = styled.div`
       : "inherit"};
 `;
 
-// export const table = {
-// FILES: "Archivos",
-// STATE: "Estado",
-// MAIL: "Mail",
-// NUMBER: "Número",
-// DATE_MOD: "Edición",
-// DATE_CRE: "Creación"
-// };
-
 function History({ data }) {
   return (
     <HistoryWrapper>
@@ -52,16 +41,29 @@ function History({ data }) {
         return (
           <div key={column.heading}>
             <HistoryHeading>{column.heading}</HistoryHeading>
-            {column.content && column.content.map((item, index) => {
-              return (
-                <HistoryContent
-                  key={item.toString() + index}
-                  status={column.heading === table.STATE && item}
-                >
-                  {column.heading === table.FILES ? item.name : item}
-                </HistoryContent>
-              );
-            })}
+            {column.content &&
+              column.content.map((item, index) => {
+                return (
+                  <HistoryContent
+                    key={item.toString() + index}
+                    status={column.heading === table.STATE && item}
+                  >
+                    {column.heading === table.FILES ? (
+                      item.name
+                    ) : column.heading === table.DATE_CRE ||
+                      column.heading === table.DATE_MOD ? (
+                      <>
+                        Hace{' '}
+                        <Moment fromNow ago locale="es">
+                          {item}
+                        </Moment>
+                      </>
+                    ) : (
+                      item
+                    )}
+                  </HistoryContent>
+                );
+              })}
           </div>
         );
       })}

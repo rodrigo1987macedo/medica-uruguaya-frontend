@@ -3,6 +3,7 @@ export const table = {
   STATE: "Estado",
   MAIL: "Mail",
   NUMBER: "Número",
-  DATE_MOD: "Edición",
+  NAME: "Nombre",
+  DATE_MOD: "Última Edición",
   DATE_CRE: "Creación"
 };

@@ -1,15 +1,13 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { trackPromise } from "react-promise-tracker";
 import { tabs } from "../../constants/tabs";
 import { Button } from "../../styles/Button";
-import { ErrorMessage } from "../../styles/ErrorMessage";
 import { InputText } from "../../styles/InputText";
-import Loader from "../common/Loader";
 import Title from "../common/Title";
-import UserData from "../common/UserData";
 import History from "../admin/History";
-import { table } from '../../constants/table'
+import { table } from "../../constants/table";
+import Loader from "../common/Loader";
 
 function CreateUser() {
   const [createUserState, setCreateUserState] = useState({
@@ -20,6 +18,49 @@ function CreateUser() {
   });
   const [newUserOutput, setNewUserOutput] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [lastUsers, setLastUsers] = useState({
+    number: undefined,
+    username: undefined,
+    email: undefined,
+    updated: undefined,
+    created: undefined
+  });
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://arcane-everglades-49934.herokuapp.com/users?_sort=createdAt:desc`
+      )
+      .then(res => {
+        let number = [];
+        res.data.map(item => {
+          number.push(item.number);
+        });
+        let username = [];
+        res.data.map(item => {
+          username.push(item.username);
+        });
+        let email = [];
+        res.data.map(item => {
+          email.push(item.email);
+        });
+        let updated = [];
+        res.data.map(item => {
+          updated.push(item.updatedAt);
+        });
+        let created = [];
+        res.data.map(item => {
+          created.push(item.createdAt);
+        });
+        setLastUsers({
+          number,
+          username,
+          email,
+          updated,
+          created
+        });
+      });
+  }, [newUserOutput]);
 
   function createUser(newUser) {
     trackPromise(
@@ -79,18 +120,19 @@ function CreateUser() {
         onChange={handleCreateUserChange}
       />
       <Button onClick={() => createUser(createUserState)}>Crear usuario</Button>
-      <Loader />
-      {newUserOutput && <UserData userData={newUserOutput} />}
-      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-      <Title text="Últimos usuarios creados" tag="h2" />
+      <Loader error={errorMessage} />
+      <Title text="Historial de usuarios" tag="h2" />
+      <History
+        data={[
+          { heading: table.NUMBER, content: lastUsers.number },
+          { heading: table.NAME, content: lastUsers.username },
+          { heading: table.MAIL, content: lastUsers.email },
+          { heading: table.DATE_MOD, content: lastUsers.updated },
+          { heading: table.DATE_CRE, content: lastUsers.created }
+        ]}
+      />
     </>
   );
 }
-// <History
-// content={[
-// { heading: table.FILES, content: filesToBeLoaded },
-// { heading: table.STATE, cotent: filesToBeLoadedStatus }
-// ]}
-// />
 
 export default CreateUser;
