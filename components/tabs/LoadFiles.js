@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { status } from "../../constants/status";
 import { table } from "../../constants/table";
 import { tabs } from "../../constants/tabs";
-import { Button } from "../../styles/Button";
-import History from "../admin/History";
+import Button from "../common/Button";
+import Table from "../common/Table";
 import Title from "../common/Title";
 
 const Input = styled.input`
@@ -104,18 +104,17 @@ function LoadFiles() {
               multiple
             />
             <Button
+              text="Cargar archivos"
               onClick={() =>
                 recursiveUploadChain(setFilesArray(filesToBeLoaded))
               }
-            >
-              Cargar archivos
-            </Button>
+            />
           </div>
         ) : (
           <div>Procesando...</div>
         )}
       </FileLoader>
-      <History
+      <Table
         data={[
           { heading: table.FILES, content: filesToBeLoaded },
           { heading: table.STATE, content: filesToBeLoadedStatus }

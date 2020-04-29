@@ -1,13 +1,14 @@
 import axios from "axios";
-import { table } from "../../constants/table";
 import React, { useState } from "react";
 import { trackPromise } from "react-promise-tracker";
+import { status } from "../../constants/status";
+import { table } from "../../constants/table";
 import { tabs } from "../../constants/tabs";
-import { Button } from "../../styles/Button";
-import { InputText } from "../../styles/InputText";
+import Button from "../common/Button";
+import Input from "../common/Input";
+import Loader from "../common/Loader";
+import Table from "../common/Table";
 import Title from "../common/Title";
-import History from "../admin/History";
-import Loader from "./Loader";
 
 function FindUser() {
   const [findUserState, setFindUserState] = useState();
@@ -32,7 +33,7 @@ function FindUser() {
         )
         .then(res => {
           if (res.data.length === 0) {
-            setErrorMessage("No existe usuario con tal número");
+            setErrorMessage(status.ERROR_USER);
           }
           let number = [];
           res.data.map(item => {
@@ -53,7 +54,7 @@ function FindUser() {
           });
         })
         .catch(() => {
-          setErrorMessage("Error en el servidor");
+          setErrorMessage(status.ERROR_SERVER);
         })
     );
   }
@@ -65,17 +66,15 @@ function FindUser() {
   return (
     <>
       <Title text={tabs.FIND} tag="h1" />
-      <InputText
+      <Input
         placeholder="Número"
         type="text"
         value={findUserState}
         onChange={handleFindUserChange}
       />
-      <Button onClick={() => findUser(findUserState)} button>
-        Buscar usuario
-      </Button>
+      <Button text="Buscar Usuario" onClick={() => findUser(findUserState)} />
       <Loader error={errorMessage} />
-      <History
+      <Table
         data={[
           { heading: table.NUMBER, content: userData.number },
           { heading: table.NAME, content: userData.username },

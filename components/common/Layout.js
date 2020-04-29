@@ -20,7 +20,7 @@ function Layout({ children }) {
           rel="icon"
           type="image/icon"
           sizes="256x256"
-          href="/faavicon.ico"
+          href="/favicon.ico"
         />
       </Head>
       {children}

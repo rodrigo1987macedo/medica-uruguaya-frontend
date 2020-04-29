@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { status } from "../../constants/status";
 import { table } from "../../constants/table";
 
-const HistoryWrapper = styled.div`
+const TableWrapper = styled.div`
   display: flex;
   width: 100%;
   > div:nth-child(1) {
@@ -14,14 +14,14 @@ const HistoryWrapper = styled.div`
     flex: 1;
   }
 `;
-const HistoryHeading = styled.div`
+const TableHeading = styled.div`
   display: flex;
   border: 1px solid ${props => props.theme.colors.border1};
   padding: 8px;
   background: ${props => props.theme.colors.background1};
 `;
 
-const HistoryContent = styled.div`
+const TableContent = styled.div`
   border-bottom: 1px solid ${props => props.theme.colors.border1};
   padding: 14px 8px;
   color: ${props =>
@@ -34,17 +34,17 @@ const HistoryContent = styled.div`
       : "inherit"};
 `;
 
-function History({ data }) {
+function Table({ data }) {
   return (
-    <HistoryWrapper>
+    <TableWrapper>
       {data.map(column => {
         return (
           <div key={column.heading}>
-            <HistoryHeading>{column.heading}</HistoryHeading>
+            <TableHeading>{column.heading}</TableHeading>
             {column.content &&
               column.content.map((item, index) => {
                 return (
-                  <HistoryContent
+                  <TableContent
                     key={item.toString() + index}
                     status={column.heading === table.STATE && item}
                   >
@@ -61,14 +61,14 @@ function History({ data }) {
                     ) : (
                       item
                     )}
-                  </HistoryContent>
+                  </TableContent>
                 );
               })}
           </div>
         );
       })}
-    </HistoryWrapper>
+    </TableWrapper>
   );
 }
 
-export default History;
+export default Table;

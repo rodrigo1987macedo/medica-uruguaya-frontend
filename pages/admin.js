@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import FindUser from "../components/common/FindUser";
-import CreateUser from "../components/admin/CreateUser";
-import LoadFiles from "../components/admin/LoadFiles";
-import { auth } from "../utils/auth";
-import { Cookies } from "react-cookie";
-import Router from "next/router";
-import { tabs } from "../constants/tabs";
 import Link from "next/link";
-import { Navbar } from "../styles/Navbar";
+import Router from "next/router";
+import React, { useState } from "react";
+import { Cookies } from "react-cookie";
+import styled from "styled-components";
+import FindUser from "../components/tabs/FindUser";
 import Layout from "../components/common/Layout";
-import ModifyUser from "../components/admin/ModifyUser";
+import CreateUser from "../components/tabs/CreateUser";
+import LoadFiles from "../components/tabs/LoadFiles";
+import ModifyUser from "../components/tabs/ModifyUser";
+import { tabs } from "../constants/tabs";
+import Navbar from "../components/common/Navbar";
+import { auth } from "../utils/auth";
 
 const AdminDisplay = styled.div`
   display: flex;

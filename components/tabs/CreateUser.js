@@ -1,13 +1,14 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { trackPromise } from "react-promise-tracker";
-import { tabs } from "../../constants/tabs";
-import { Button } from "../../styles/Button";
-import { InputText } from "../../styles/InputText";
-import Title from "../common/Title";
-import History from "../admin/History";
+import { status } from "../../constants/status";
 import { table } from "../../constants/table";
+import { tabs } from "../../constants/tabs";
+import Button from "../common/Button";
+import Input from "../common/Input";
 import Loader from "../common/Loader";
+import Table from "../common/Table";
+import Title from "../common/Title";
 
 function CreateUser() {
   const [createUserState, setCreateUserState] = useState({
@@ -84,7 +85,7 @@ function CreateUser() {
             document
           });
         })
-        .catch(() => setErrorMessage("Ha ocurrido un error"))
+        .catch(() => setErrorMessage(status.ERROR))
     );
   }
 
@@ -98,31 +99,34 @@ function CreateUser() {
   return (
     <>
       <Title text={tabs.CREATE} tag="h1" />
-      <InputText
+      <Input
         placeholder="Nombre"
         name="username"
         type="text"
         value={createUserState.username}
         onChange={handleCreateUserChange}
       />
-      <InputText
+      <Input
         placeholder="Email"
         name="email"
         type="text"
         value={createUserState.email}
         onChange={handleCreateUserChange}
       />
-      <InputText
+      <Input
         placeholder="Número"
         name="number"
         type="text"
         value={createUserState.number}
         onChange={handleCreateUserChange}
       />
-      <Button onClick={() => createUser(createUserState)}>Crear usuario</Button>
+      <Button
+        text="Crear Usuario"
+        onClick={() => createUser(createUserState)}
+      />
       <Loader error={errorMessage} />
       <Title text="Historial de usuarios" tag="h2" />
-      <History
+      <Table
         data={[
           { heading: table.NUMBER, content: lastUsers.number },
           { heading: table.NAME, content: lastUsers.username },

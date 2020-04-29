@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { trackPromise } from "react-promise-tracker";
 import Title from "../common/Title";
 import { tabs } from "../../constants/tabs";
-import { Button } from "../../styles/Button";
-import { InputText } from "../../styles/InputText";
+import Button from "../common/Button";
+import Input from "../common/Input";
 
 function ModifyUser() {
   const [modifyUserState, setModifyUserState] = useState("");
@@ -29,15 +29,13 @@ function ModifyUser() {
   return (
     <>
       <Title text={tabs.MODIFY} tag="h1" />
-      <InputText
+      <Input
         placeholder="Número"
         type="text"
         value={modifyUserState}
         onChange={handleModifyUserChange}
       />
-      <Button onClick={() => modifyUser(getUserState)} button>
-        Buscar usuario
-      </Button>
+      <Button text='Buscar usuario' onClick={() => modifyUser(getUserState)} />
     </>
   );
 }

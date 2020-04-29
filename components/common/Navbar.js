@@ -1,6 +1,7 @@
+import React from "react";
 import styled from 'styled-components'
 
-export const Navbar = styled.div`
+const NavbarWrapper = styled.div`
   background: ${props => props.theme.colors.background1};
   border-bottom: 1px solid ${props => props.theme.colors.border1};
   > div {
@@ -16,4 +17,12 @@ export const Navbar = styled.div`
   }
 `;
 
+function Navbar({ children }) {
+  return (
+    <NavbarWrapper>
+      {children}
+    </NavbarWrapper>
+  );
+}
 
+export default Navbar;

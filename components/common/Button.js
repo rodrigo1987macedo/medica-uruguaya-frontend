@@ -1,6 +1,7 @@
+import React from "react";
 import styled from "styled-components";
 
-export const Button = styled.button`
+const ButtonWrapper = styled.button`
   display: inline;
   background: ${props => props.theme.colors.primary};
   color: ${props => props.theme.colors.background1};
@@ -9,3 +10,9 @@ export const Button = styled.button`
   padding: 4px 10px;
   cursor: pointer;
 `;
+
+function Button({ text, onClick }) {
+  return <ButtonWrapper onClick={onClick}>{text}</ButtonWrapper>;
+}
+
+export default Button;

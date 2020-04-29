@@ -1,15 +1,11 @@
-import axios from "axios";
 import Link from "next/link";
-import React, { useState } from "react";
-import Title from "../components/common/Title";
-import { Navbar } from "../styles/Navbar";
-import { PageWrapper } from "../styles/PageWrapper";
-import Form from "../components/login/Form";
-import FindUser from "../components/common/FindUser";
+import React from "react";
+import Navbar from "../components/common/Navbar";
+import FindUser from "../components/tabs/FindUser";
 
 export default () => {
   return (
-    <PageWrapper>
+    <>
       <Navbar>
         <div>
           <Link href="/">
@@ -27,6 +23,6 @@ export default () => {
       <div>
         <FindUser />
       </div>
-    </PageWrapper>
+    </>
   );
 };
