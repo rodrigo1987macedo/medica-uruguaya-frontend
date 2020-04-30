@@ -3,7 +3,9 @@ import styled from "styled-components";
 import { usePromiseTracker } from "react-promise-tracker";
 
 const ResultWrapper = styled.div`
-  min-height: 30px;
+  display: flex;
+  align-items: center;
+  min-height: 40px;
   border-bottom: 1px solid ${props => props.theme.colors.border2};
   margin: 0 0 40px 0;
 `;

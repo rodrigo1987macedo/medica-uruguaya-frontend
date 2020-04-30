@@ -6,6 +6,7 @@ ${styledNormalize}
 @font-face { 
   font-family: 'Brother';
   src: local('Brother'), url('/brother-normal.woff') format('woff');
+  font-weight: normal;
 }
 @font-face { 
   font-family: 'Brother';
@@ -15,11 +16,17 @@ ${styledNormalize}
 @font-face { 
   font-family: 'Alright';
   src: local('Alright'), url('/alright-normal.woff') format('woff');
+  font-weight: medium;
 }
 @font-face { 
   font-family: 'Alright';
   src: local('Alright'), url('/alright-bold.woff') format('woff');
   font-weight: bold;
+}
+@font-face { 
+  font-family: 'Alright';
+  src: local('Alright'), url('/alright-thin.woff') format('woff');
+  font-weight: thin;
 }
 html {
   font-family: 'Brother';

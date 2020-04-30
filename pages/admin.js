@@ -30,7 +30,7 @@ const Tab = styled.div`
   color: ${props => props.theme.colors.tab};
   font-family: "Alright";
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
   text-transform: uppercase;
   cursor: pointer;
   :hover {
@@ -71,12 +71,12 @@ function Admin({ data }) {
           </AdminDisplay>
         </div>
       </Navbar>
-      <div>
+      <main>
         {currentTab === tabs.LOAD && <LoadFiles />}
         {currentTab === tabs.FIND && <FindUser />}
         {currentTab === tabs.CREATE && <CreateUser />}
         {currentTab === tabs.MODIFY && <ModifyUser />}
-      </div>
+      </main>
     </Layout>
   );
 }

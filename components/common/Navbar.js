@@ -4,6 +4,7 @@ import styled from 'styled-components'
 const NavbarWrapper = styled.div`
   background: ${props => props.theme.colors.background1};
   border-bottom: 1px solid ${props => props.theme.colors.border1};
+  padding: 25px 150px 12px 150px;
   > div {
     display: flex;
     justify-content: space-between;

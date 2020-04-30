@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import { trackPromise } from "react-promise-tracker";
 import styled from "styled-components";
-import { Button } from "../styles/Button";
-import { InputText } from "../styles/InputText";
+import Button from "../components/common/Button";
+import Input from "../components/common/Input";
 import Loader from "../components/common/Loader";
 import Title from "../components/common/Title";
 
@@ -79,7 +79,7 @@ export default () => {
       <div>
         <Title text="Ingresar" tag="h1" />
         <>
-          <InputText
+          <Input
             type="email"
             id="email"
             name="email"
@@ -90,7 +90,7 @@ export default () => {
         </>
         <br />
         <>
-          <InputText
+          <Input
             type="password"
             id="password"
             name="password"
@@ -100,7 +100,7 @@ export default () => {
           />
         </>
         <br />
-        <Button onClick={() => handleSubmit()}>Ingresar</Button>
+        <Button text='Ingresar' onClick={() => handleSubmit()} />
         <Loader error={errorMessage} />
         <Logo src="logo.png" />
       </div>

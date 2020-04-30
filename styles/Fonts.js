@@ -2,6 +2,7 @@ const FontFaceObserver = require("fontfaceobserver");
 
 const fonts = [
   ["/alright-normal.woff", "Alright"],
+  ["/alright-thin.woff", "Alright"],
   ["/alright-bold.woff", "Alright"],
   ["/brother-normal.woff", "Brother"],
   ["/brother-thin.woff", "Brother"]
