@@ -11,6 +11,7 @@ import ModifyUser from "../components/tabs/ModifyUser";
 import { tabs } from "../constants/tabs";
 import Navbar from "../components/common/Navbar";
 import { auth } from "../utils/auth";
+import MeData from "../components/tabs/MeData";
 
 const AdminDisplay = styled.div`
   display: flex;
@@ -83,6 +84,11 @@ function Admin({ data }) {
           {currentTab === tabs.FIND && <FindUser />}
           {currentTab === tabs.CREATE && <CreateUser />}
           {currentTab === tabs.MODIFY && <ModifyUser />}
+        </main>
+      )}
+      {data.role.type === "authenticated" && (
+        <main>
+          <MeData data={data} />
         </main>
       )}
     </Layout>
