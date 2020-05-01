@@ -7,6 +7,9 @@ import { tabs } from "../../constants/tabs";
 import Button from "../common/Button";
 import Table from "../common/Table";
 import Title from "../common/Title";
+import { Cookies } from "react-cookie";
+
+const cookies = new Cookies();
 
 const Input = styled.input`
   padding: 4px 10px;
@@ -51,7 +54,12 @@ function LoadFiles() {
           `https://arcane-everglades-49934.herokuapp.com/users?number=${nextFile.name
             .split(".")
             .slice(0, -1)
-            .join(".")}`
+            .join(".")}`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.get("guards")}`
+            }
+          }
         )
         .then(result => {
           if (result.data[0].id) {
@@ -65,7 +73,12 @@ function LoadFiles() {
             axios
               .post(
                 `https://arcane-everglades-49934.herokuapp.com/upload`,
-                data
+                data,
+                {
+                  headers: {
+                    Authorization: `Bearer ${cookies.get("guards")}`
+                  }
+                }
               )
               .then(() => setLoadingStatus(nextFileIndex, status.SUCCESS))
               .catch(() => setLoadingStatus(nextFileIndex, status.ERROR))

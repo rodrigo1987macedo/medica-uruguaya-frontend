@@ -5,6 +5,9 @@ import Title from "../common/Title";
 import { tabs } from "../../constants/tabs";
 import Button from "../common/Button";
 import Input from "../common/Input";
+import { Cookies } from "react-cookie";
+
+const cookies = new Cookies();
 
 function ModifyUser() {
   const [modifyUserState, setModifyUserState] = useState("");
@@ -13,7 +16,12 @@ function ModifyUser() {
     trackPromise(
       axios
         .get(
-          `https://arcane-everglades-49934.herokuapp.com/users?number=${employeeNumber}`
+          `https://arcane-everglades-49934.herokuapp.com/users?number=${employeeNumber}`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.get("guards")}`
+            }
+          }
         )
         .then(res => {
           let result = res.data[0].file.url;
@@ -35,7 +43,7 @@ function ModifyUser() {
         value={modifyUserState}
         onChange={handleModifyUserChange}
       />
-      <Button text='Buscar usuario' onClick={() => modifyUser(getUserState)} />
+      <Button text="Buscar usuario" onClick={() => modifyUser(getUserState)} />
     </>
   );
 }

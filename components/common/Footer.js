@@ -40,10 +40,7 @@ const FooterFirst = styled.div`
   display: flex;
   > img {
     height: 69px;
-    margin: 0 8vw 30px 30px;
-    @media only screen and (max-width: 990px) {
-      margin: 0 8vw 30px 0;
-    }
+    margin: 0 8vw 30px 0;
     @media only screen and (max-width: 770px) {
       display: none;
     }

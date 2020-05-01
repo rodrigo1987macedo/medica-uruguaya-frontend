@@ -9,6 +9,9 @@ import Input from "../common/Input";
 import Loader from "../common/Loader";
 import Table from "../common/Table";
 import Title from "../common/Title";
+import { Cookies } from "react-cookie";
+
+const cookies = new Cookies();
 
 function CreateUser() {
   const [createUserState, setCreateUserState] = useState({
@@ -30,7 +33,12 @@ function CreateUser() {
   useEffect(() => {
     axios
       .get(
-        `https://arcane-everglades-49934.herokuapp.com/users?_sort=createdAt:desc`
+        `https://arcane-everglades-49934.herokuapp.com/users?_sort=createdAt:desc`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.get("guards")}`
+          }
+        }
       )
       .then(res => {
         let number = [];
@@ -66,7 +74,11 @@ function CreateUser() {
   function createUser(newUser) {
     trackPromise(
       axios
-        .post(`https://arcane-everglades-49934.herokuapp.com/users`, newUser)
+        .post(`https://arcane-everglades-49934.herokuapp.com/users`, newUser, {
+          headers: {
+            Authorization: `Bearer ${cookies.get("guards")}`
+          }
+        })
         .then(res => {
           setCreateUserState({
             username: "",

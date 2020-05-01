@@ -9,6 +9,9 @@ import Input from "../common/Input";
 import Loader from "../common/Loader";
 import Table from "../common/Table";
 import Title from "../common/Title";
+import { Cookies } from "react-cookie";
+
+const cookies = new Cookies();
 
 function FindUser() {
   const [findUserState, setFindUserState] = useState();
@@ -29,8 +32,11 @@ function FindUser() {
     trackPromise(
       axios
         .get(
-          `https://arcane-everglades-49934.herokuapp.com/users?number=${employeeNumber}`
-        )
+          `https://arcane-everglades-49934.herokuapp.com/users?number=${employeeNumber}`, {
+          headers: {
+            Authorization: `Bearer ${cookies.get("guards")}`
+          }
+        })
         .then(res => {
           if (res.data.length === 0) {
             setErrorMessage(status.ERROR_USER);

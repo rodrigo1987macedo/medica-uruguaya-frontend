@@ -59,24 +59,32 @@ function Admin({ data }) {
           </Link>
         </div>
         <div>
-          <Tabs>
-            <Tab onClick={() => setCurrentTab(tabs.LOAD)}>{tabs.LOAD}</Tab>
-            <Tab onClick={() => setCurrentTab(tabs.FIND)}>{tabs.FIND}</Tab>
-            <Tab onClick={() => setCurrentTab(tabs.MODIFY)}>{tabs.MODIFY}</Tab>
-            <Tab onClick={() => setCurrentTab(tabs.CREATE)}>{tabs.CREATE}</Tab>
-          </Tabs>
+          {data.role.type === "admin" && (
+            <Tabs>
+              <Tab onClick={() => setCurrentTab(tabs.LOAD)}>{tabs.LOAD}</Tab>
+              <Tab onClick={() => setCurrentTab(tabs.FIND)}>{tabs.FIND}</Tab>
+              <Tab onClick={() => setCurrentTab(tabs.MODIFY)}>
+                {tabs.MODIFY}
+              </Tab>
+              <Tab onClick={() => setCurrentTab(tabs.CREATE)}>
+                {tabs.CREATE}
+              </Tab>
+            </Tabs>
+          )}
           <AdminDisplay>
             <div>Bienvenido, {data.username}</div>
             <Tab onClick={() => logout()}>Cerrar sesión</Tab>
           </AdminDisplay>
         </div>
       </Navbar>
-      <main>
-        {currentTab === tabs.LOAD && <LoadFiles />}
-        {currentTab === tabs.FIND && <FindUser />}
-        {currentTab === tabs.CREATE && <CreateUser />}
-        {currentTab === tabs.MODIFY && <ModifyUser />}
-      </main>
+      {data.role.type === "admin" && (
+        <main>
+          {currentTab === tabs.LOAD && <LoadFiles />}
+          {currentTab === tabs.FIND && <FindUser />}
+          {currentTab === tabs.CREATE && <CreateUser />}
+          {currentTab === tabs.MODIFY && <ModifyUser />}
+        </main>
+      )}
     </Layout>
   );
 }

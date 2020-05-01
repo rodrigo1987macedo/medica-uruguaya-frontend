@@ -9,6 +9,7 @@ const LayoutWrapper = styled.div`
 
 const Content = styled.div`
   min-height: 100vh;
+  padding: 0 0 30px 0;
   > main {
     padding: 32px 150px 14px 150px;
   }
