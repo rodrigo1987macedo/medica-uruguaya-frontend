@@ -25,26 +25,22 @@ const EmptyMessage = styled.div`
 `;
 
 function MeData({ data }) {
-  // console.log('date: ', Date.now())
-  // console.log('data: ', data)
-  // useEffect(() => {
-    // axios
-      // .post(
-        // `https://arcane-everglades-49934.herokuapp.com/users?id=${data.id}`,
-        // {
-          // seen: Date.now()
-        // },
-        // {
-          // headers: {
-            // Authorization: `Bearer ${cookies.get("guards")}`
-          // }
-        // }
-      // )
-      // .then(res => {
-        // console.log("res: ", res);
-      // })
-      // .catch(() => console.log("error"));
-  // }, []);
+  let now = new Date();
+  console.log('date: ', now.toISOString())
+  useEffect(() => {
+    axios
+      .put(
+        `https://arcane-everglades-49934.herokuapp.com/users/${data.id}`,
+        {
+          seen: now.toISOString()
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.get("guards")}`
+          }
+        }
+      )
+  }, []);
 
   return (
     <MeDataWrapper>
@@ -55,7 +51,7 @@ function MeData({ data }) {
       <div>
         <b>Email:</b> {data.email ? data.email : " -"}
       </div>
-      {data.file.url ? (
+      {data.file ? (
         <a href={data.file.url} download target="_blank">
           <span>
             Descargar guardia [
