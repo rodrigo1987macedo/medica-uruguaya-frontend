@@ -26,7 +26,6 @@ const EmptyMessage = styled.div`
 
 function MeData({ data }) {
   let now = new Date();
-  console.log('date: ', now.toISOString())
   useEffect(() => {
     axios
       .put(

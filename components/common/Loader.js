@@ -14,11 +14,15 @@ const ErrorMessage = styled.div`
   color: ${props => props.theme.colors.error};
 `;
 
+const SuccessMessage = styled.div`
+  color: ${props => props.theme.colors.primary};
+`;
+
 const Loading = styled.div`
   color: ${props => props.theme.colors.process};
 `;
 
-function Loader({ error }) {
+function Loader({ success, error }) {
   const { promiseInProgress } = usePromiseTracker();
   return (
     <ResultWrapper>
@@ -26,6 +30,8 @@ function Loader({ error }) {
         <Loading>Cargando...</Loading>
       ) : error ? (
         <ErrorMessage>{error}</ErrorMessage>
+      ) : success ? (
+        <SuccessMessage>{success}</SuccessMessage>
       ) : null}
     </ResultWrapper>
   );

@@ -3,6 +3,7 @@ import React from "react";
 import { ThemeProvider } from "styled-components";
 import { CookiesProvider } from "react-cookie";
 import GlobalStyle from "../styles/globalStyle";
+import "react-responsive-modal/styles.css";
 import Fonts from "../styles/Fonts";
 
 const theme = {

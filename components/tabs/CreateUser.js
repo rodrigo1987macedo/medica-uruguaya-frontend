@@ -42,23 +42,15 @@ function CreateUser() {
       )
       .then(res => {
         let number = [];
-        res.data.map(item => {
-          number.push(item.number);
-        });
         let username = [];
-        res.data.map(item => {
-          username.push(item.username);
-        });
         let email = [];
-        res.data.map(item => {
-          email.push(item.email);
-        });
         let updated = [];
-        res.data.map(item => {
-          updated.push(item.updatedAt);
-        });
         let created = [];
         res.data.map(item => {
+          number.push(item.number);
+          username.push(item.username);
+          email.push(item.email);
+          updated.push(item.updatedAt);
           created.push(item.createdAt);
         });
         setLastUsers({

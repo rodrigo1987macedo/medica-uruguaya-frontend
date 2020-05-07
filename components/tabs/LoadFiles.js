@@ -8,11 +8,13 @@ import Button from "../common/Button";
 import Table from "../common/Table";
 import Title from "../common/Title";
 import { Cookies } from "react-cookie";
+import PopUp from '../common/PopUp'
+import Reach from "../popups/Reach";
 
 const cookies = new Cookies();
 
 const Input = styled.input`
-  padding: 4px 10px;
+  padding: 4px 10px 4px 0;
   height: 30px;
   width: 250px;
 `;
@@ -108,6 +110,7 @@ function LoadFiles() {
   return (
     <>
       <Title text={tabs.LOAD} tag="h1" />
+      <PopUp><Reach /></PopUp>
       <FileLoader>
         {!isLoading ? (
           <div>
