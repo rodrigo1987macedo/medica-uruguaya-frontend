@@ -6,7 +6,7 @@ const ResultWrapper = styled.div`
   display: flex;
   align-items: center;
   min-height: 40px;
-  border-bottom: 1px solid ${props => props.theme.colors.border2};
+  border-bottom: 1px solid ${props => props.theme.colors.border1};
   margin: 0 0 40px 0;
 `;
 

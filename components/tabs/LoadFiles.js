@@ -8,10 +8,18 @@ import Button from "../common/Button";
 import Table from "../common/Table";
 import Title from "../common/Title";
 import { Cookies } from "react-cookie";
-import PopUp from '../common/PopUp'
+import PopUp from "../common/PopUp";
 import Reach from "../popups/Reach";
+import DeleteAll from "../popups/DeleteAll";
 
 const cookies = new Cookies();
+
+const LoadFilesWrapper = styled.div`
+  > div:nth-child(2) {
+    border-bottom: 1px solid ${props => props.theme.colors.border1};
+    padding: 0 0 30px 0;
+  }
+`;
 
 const Input = styled.input`
   padding: 4px 10px 4px 0;
@@ -19,11 +27,14 @@ const Input = styled.input`
   width: 250px;
 `;
 
-const FileLoader = styled.div`
+const Section = styled.div`
   display: flex;
   align-items: center;
   margin: 0 0 30px 0;
   min-height: 30px;
+  button:nth-child(1) {
+    margin: 0 15px 0 0;
+  }
 `;
 
 function LoadFiles() {
@@ -108,35 +119,42 @@ function LoadFiles() {
   }
 
   return (
-    <>
+    <LoadFilesWrapper>
       <Title text={tabs.LOAD} tag="h1" />
-      <PopUp><Reach /></PopUp>
-      <FileLoader>
+      <Section>
+        <PopUp buttonText="Verificar alcance">
+          <Reach />
+        </PopUp>
+        <PopUp buttonText="Borrar todas las guardias" secondary={true}>
+          <DeleteAll />
+        </PopUp>
+      </Section>
+      <Section>
         {!isLoading ? (
           <div>
-            <Input
-              type="file"
-              onChange={e => handleLoadFileChange(e)}
-              multiple
-            />
             <Button
               text="Cargar archivos"
               onClick={() =>
                 recursiveUploadChain(setFilesArray(filesToBeLoaded))
               }
             />
+            <Input
+              type="file"
+              onChange={e => handleLoadFileChange(e)}
+              multiple
+            />
           </div>
         ) : (
           <div>Procesando...</div>
         )}
-      </FileLoader>
+      </Section>
       <Table
         data={[
           { heading: table.FILES, content: filesToBeLoaded },
           { heading: table.STATE, content: filesToBeLoadedStatus }
         ]}
       />
-    </>
+    </LoadFilesWrapper>
   );
 }
 
