@@ -18,7 +18,9 @@ function FindUser() {
   const [userData, setUserData] = useState({
     number: undefined,
     username: undefined,
-    email: undefined
+    email: undefined,
+    guard: undefined,
+    ci: undefined
   });
   const [errorMessage, setErrorMessage] = useState();
 
@@ -27,36 +29,42 @@ function FindUser() {
     setUserData({
       number: null,
       username: null,
-      email: null
+      email: null,
+      guard: null,
+      ci: null
     });
     trackPromise(
       axios
         .get(
-          `https://arcane-everglades-49934.herokuapp.com/users?number=${employeeNumber}`, {
-          headers: {
-            Authorization: `Bearer ${cookies.get("guards")}`
+          `https://arcane-everglades-49934.herokuapp.com/users?number=${employeeNumber}`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.get("guards")}`
+            }
           }
-        })
+        )
         .then(res => {
           if (res.data.length === 0) {
             setErrorMessage(status.ERROR_USER);
           }
           let number = [];
+          let username = [];
+          let email = [];
+          let guard = [];
+          let ci = [];
           res.data.map(item => {
             number.push(item.number);
-          });
-          let username = [];
-          res.data.map(item => {
             username.push(item.username);
-          });
-          let email = [];
-          res.data.map(item => {
             email.push(item.email);
+            guard.push(item.file);
+            ci.push(item.ci);
           });
           setUserData({
             number,
             username,
-            email
+            email,
+            guard,
+            ci
           });
         })
         .catch(() => {
@@ -71,20 +79,24 @@ function FindUser() {
 
   return (
     <>
-      <Title text={tabs.FIND} tag="h1" />
+      <Title text={tabs.USERS.FIND} tag="h1" />
       <Input
         placeholder="Número"
         type="text"
         value={findUserState}
         onChange={handleFindUserChange}
+        rightMargin={true}
       />
-      <Button text="Buscar Usuario" onClick={() => findUser(findUserState)} />
+      <Button text={tabs.USERS.FIND} onClick={() => findUser(findUserState)} />
       <Loader error={errorMessage} />
+      <Title text="Usuario buscado" tag="h2" />
       <Table
         data={[
           { heading: table.NUMBER, content: userData.number },
           { heading: table.NAME, content: userData.username },
-          { heading: table.MAIL, content: userData.email }
+          { heading: table.MAIL, content: userData.email },
+          { heading: table.GUARD, content: userData.guard },
+          { heading: table.CI, content: userData.ci }
         ]}
       />
     </>

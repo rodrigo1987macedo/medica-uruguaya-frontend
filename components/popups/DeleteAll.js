@@ -4,17 +4,20 @@ import styled from "styled-components";
 import { Cookies } from "react-cookie";
 import Button from "../common/Button";
 import Title from "../common/Title";
+import PopUp from "../common/PopUp";
+import SafeGuard from "../common/SafeGuard";
+import { trackPromise } from "react-promise-tracker";
 
 const cookies = new Cookies();
 
-const DeleteAllWrapper = styled.div`
-  width: 400px;
+const Results = styled.div`
+  min-height: 60px;
   > div {
     margin: 10px 0;
   }
 `;
 
-const Error = styled.div`
+const Warning = styled.div`
   color: ${props => props.theme.colors.error};
 `;
 
@@ -32,8 +35,15 @@ const process = {
 function DeleteAll() {
   const [status, setStatus] = useState();
   const [error, setError] = useState();
+  const [gettingFiles, setGettingFiles] = useState();
+
+  function resetState() {
+    setStatus(null);
+    setError(null);
+  }
 
   function recursiveDeletionChain() {
+    setGettingFiles("Procesando...");
     axios
       .get(`https://arcane-everglades-49934.herokuapp.com/upload/files`, {
         headers: {
@@ -61,6 +71,7 @@ function DeleteAll() {
             })
             .finally(() => recursiveDeletionChain());
         } else {
+          setGettingFiles(null);
           setStatus(process.FINISHED);
         }
       })
@@ -68,21 +79,30 @@ function DeleteAll() {
   }
 
   return (
-    <DeleteAllWrapper>
+    <PopUp
+      buttonText="Borrar todas las guardias"
+      secondary={true}
+      onClose={resetState}
+    >
       <Title
         text="Eliminar guardias"
-        explanation="Una vez eliminadas, no podrán recuperarse. Este proceso borrará TODAS las guardias del sistema de manera definitiva"
+        explanation="Este proceso borrará TODAS las guardias del sistema de manera definitiva"
         tag="h1"
         danger={true}
       />
-      <Button
-        onClick={() => recursiveDeletionChain()}
-        text="Comenzar"
-        danger={true}
-      />
-      <Status>{status}</Status>
-      <Error>{error}</Error>
-    </DeleteAllWrapper>
+      <SafeGuard>
+        <Button
+          onClick={() => recursiveDeletionChain()}
+          text="Comenzar"
+          danger={true}
+        />
+        <Results>
+          <div>{gettingFiles}</div>
+          <Status>{status}</Status>
+          <Warning>{error}</Warning>
+        </Results>
+      </SafeGuard>
+    </PopUp>
   );
 }
 

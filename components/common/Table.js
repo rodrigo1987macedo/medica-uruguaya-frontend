@@ -7,23 +7,33 @@ import { table } from "../../constants/table";
 const TableWrapper = styled.div`
   display: flex;
   width: 100%;
-  > div:nth-child(1) {
-    flex: 0 0 200px;
-  }
-  > div:nth-child(n + 2) {
+  min-height: 80px;
+  border-bottom: 1px solid ${props => props.theme.colors.border2};
+  div {
     flex: 1;
+    min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   }
 `;
 const TableHeading = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 8px;
+  height: 40px;
   border: 1px solid ${props => props.theme.colors.border1};
-  padding: 8px;
   background: ${props => props.theme.colors.background1};
 `;
 
 const TableContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 10px;
+  height: 46px;
   border-bottom: 1px solid ${props => props.theme.colors.border1};
-  padding: 14px 8px;
   color: ${props =>
     props.status === status.PENDING
       ? props.theme.colors.process
@@ -32,6 +42,10 @@ const TableContent = styled.div`
       : props.status === status.ERROR
       ? props.theme.colors.error
       : "inherit"};
+`;
+
+const Guard = styled.a`
+  margin: 0 10px 0 0;
 `;
 
 function Table({ data }) {
@@ -48,18 +62,30 @@ function Table({ data }) {
                     key={item.toString() + index}
                     status={column.heading === table.STATE && item}
                   >
-                    {column.heading === table.FILES ? (
+                    {column.heading === table.GUARD ? (
+                      item.map(guard => {
+                        return (
+                          <div>
+                            <Guard href={guard.url} download target="_blank">
+                              <Moment format="DD/MM/YY">
+                                {guard.createdAt}
+                              </Moment>
+                            </Guard>
+                          </div>
+                        );
+                      })
+                    ) : column.heading === table.FILES ? (
                       item.name
                     ) : column.heading === table.DATE_CRE ||
                       column.heading === table.DATE_MOD ? (
-                      <>
-                        Hace{' '}
+                      <div>
+                        Hace{" "}
                         <Moment fromNow ago locale="es">
                           {item}
                         </Moment>
-                      </>
+                      </div>
                     ) : (
-                      item
+                      <div>{item}</div>
                     )}
                   </TableContent>
                 );

@@ -7,7 +7,6 @@ import FindUser from "../components/tabs/FindUser";
 import Layout from "../components/common/Layout";
 import CreateUser from "../components/tabs/CreateUser";
 import LoadFiles from "../components/tabs/LoadFiles";
-import ModifyUser from "../components/tabs/ModifyUser";
 import { tabs } from "../constants/tabs";
 import Navbar from "../components/common/Navbar";
 import { auth } from "../utils/auth";
@@ -18,6 +17,14 @@ const AdminDisplay = styled.div`
   > div:nth-child(1) {
     margin: 0 18px 0 0;
   }
+`;
+
+const Br = styled.div`
+  width: 100%;
+  height: 3px;
+  background: darkgray;
+  // background: ${props => props.theme.colors.border2};
+  margin: 45px 0 40px 0;
 `;
 
 const Tabs = styled.div`
@@ -42,7 +49,7 @@ const Tab = styled.div`
 const cookies = new Cookies();
 
 function Admin({ data }) {
-  const [currentTab, setCurrentTab] = useState(tabs.FIND);
+  const [currentTab, setCurrentTab] = useState(tabs.DOCS.MANAGE);
 
   function logout() {
     cookies.remove("guards");
@@ -62,13 +69,9 @@ function Admin({ data }) {
         <div>
           {data.role.type === "admin" && (
             <Tabs>
-              <Tab onClick={() => setCurrentTab(tabs.LOAD)}>{tabs.LOAD}</Tab>
-              <Tab onClick={() => setCurrentTab(tabs.FIND)}>{tabs.FIND}</Tab>
-              <Tab onClick={() => setCurrentTab(tabs.MODIFY)}>
-                {tabs.MODIFY}
-              </Tab>
-              <Tab onClick={() => setCurrentTab(tabs.CREATE)}>
-                {tabs.CREATE}
+              <Tab onClick={() => setCurrentTab(tabs.DOCS.MANAGE)}>{tabs.DOCS.MANAGE}</Tab>
+              <Tab onClick={() => setCurrentTab(tabs.USERS.MANAGE)}>
+                {tabs.USERS.MANAGE}
               </Tab>
             </Tabs>
           )}
@@ -80,10 +83,14 @@ function Admin({ data }) {
       </Navbar>
       {data.role.type === "admin" && (
         <main>
-          {currentTab === tabs.LOAD && <LoadFiles />}
-          {currentTab === tabs.FIND && <FindUser />}
-          {currentTab === tabs.CREATE && <CreateUser />}
-          {currentTab === tabs.MODIFY && <ModifyUser />}
+          {currentTab === tabs.DOCS.MANAGE && <LoadFiles />}
+          {currentTab === tabs.USERS.MANAGE && (
+            <>
+              <FindUser />
+              <Br />
+              <CreateUser />
+            </>
+          )}
         </main>
       )}
       {data.role.type === "authenticated" && (

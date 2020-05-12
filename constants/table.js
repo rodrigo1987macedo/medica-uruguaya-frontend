@@ -1,5 +1,7 @@
 export const table = {
   FILES: "Archivos",
+  GUARD: "Guardias",
+  CI: "Cédula",
   STATE: "Estado",
   MAIL: "Mail",
   NUMBER: "Número",

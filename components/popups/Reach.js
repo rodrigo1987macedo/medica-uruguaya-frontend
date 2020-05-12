@@ -7,14 +7,9 @@ import { trackPromise } from "react-promise-tracker";
 import Loader from "../common/Loader";
 import Table from "../common/Table";
 import { table } from "../../constants/table";
+import PopUp from '../common/PopUp'
 
 const cookies = new Cookies();
-
-const ReachWrapper = styled.div`
-  width: 600px;
-  height: 80vh;
-  overflow-y: scroll;
-`;
 
 const Result = styled.div`
   margin: 0 0 30px 0;
@@ -130,7 +125,7 @@ function Reach() {
   }, []);
 
   return (
-    <ReachWrapper>
+    <PopUp buttonText="Verificar alcance">
       <Title text="Alcance de guardias" tag="h1" />
       <ReachedUsersBar
         reached={Math.round(
@@ -178,7 +173,7 @@ function Reach() {
           ]}
         />
       </Result>
-    </ReachWrapper>
+    </PopUp>
   );
 }
 

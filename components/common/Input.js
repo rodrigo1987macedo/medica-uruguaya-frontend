@@ -5,9 +5,10 @@ const InputWrapper = styled.input`
   border-radius: 4px;
   border: 1px solid ${props => props.theme.colors.border1};
   padding: 8px;
+  margin: ${props => props.rightMargin && '0 15px 0 0'}
 `
 
-function Input({ placeholder, name, type, value, onChange }) {
+function Input({ placeholder, name, type, value, onChange, rightMargin }) {
   return (
     <InputWrapper
       placeholder={placeholder}
@@ -15,6 +16,7 @@ function Input({ placeholder, name, type, value, onChange }) {
       value={value}
       type={type}
       onChange={onChange}
+      rightMargin={rightMargin}
     />
   );
 }

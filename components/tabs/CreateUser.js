@@ -102,13 +102,14 @@ function CreateUser() {
 
   return (
     <>
-      <Title text={tabs.CREATE} tag="h1" />
+      <Title text={tabs.USERS.CREATE} tag="h1" />
       <Input
         placeholder="Nombre"
         name="username"
         type="text"
         value={createUserState.username}
         onChange={handleCreateUserChange}
+        rightMargin={true}
       />
       <Input
         placeholder="Email"
@@ -116,6 +117,7 @@ function CreateUser() {
         type="text"
         value={createUserState.email}
         onChange={handleCreateUserChange}
+        rightMargin={true}
       />
       <Input
         placeholder="Número"
@@ -123,6 +125,7 @@ function CreateUser() {
         type="text"
         value={createUserState.number}
         onChange={handleCreateUserChange}
+        rightMargin={true}
       />
       <Button
         text="Crear Usuario"

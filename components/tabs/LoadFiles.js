@@ -8,7 +8,6 @@ import Button from "../common/Button";
 import Table from "../common/Table";
 import Title from "../common/Title";
 import { Cookies } from "react-cookie";
-import PopUp from "../common/PopUp";
 import Reach from "../popups/Reach";
 import DeleteAll from "../popups/DeleteAll";
 
@@ -75,6 +74,20 @@ function LoadFiles() {
           }
         )
         .then(result => {
+          result.data[0].file.map((item, index) => {
+            if (index >= 2) {
+              axios.delete(
+                `https://arcane-everglades-49934.herokuapp.com/upload/files/${
+                  item._id
+                }`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${cookies.get("guards")}`
+                  }
+                }
+              );
+            }
+          });
           if (result.data[0].id) {
             let id = result.data[0].id;
             let data = new FormData();
@@ -120,20 +133,16 @@ function LoadFiles() {
 
   return (
     <LoadFilesWrapper>
-      <Title text={tabs.LOAD} tag="h1" />
+      <Title text={tabs.DOCS.LOAD} tag="h1" />
       <Section>
-        <PopUp buttonText="Verificar alcance">
-          <Reach />
-        </PopUp>
-        <PopUp buttonText="Borrar todas las guardias" secondary={true}>
-          <DeleteAll />
-        </PopUp>
+        <Reach />
+        <DeleteAll />
       </Section>
       <Section>
         {!isLoading ? (
           <div>
             <Button
-              text="Cargar archivos"
+              text={tabs.DOCS.LOAD}
               onClick={() =>
                 recursiveUploadChain(setFilesArray(filesToBeLoaded))
               }
