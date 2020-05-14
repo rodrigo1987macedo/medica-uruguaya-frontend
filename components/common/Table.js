@@ -12,9 +12,9 @@ const TableWrapper = styled.div`
   div {
     flex: 1;
     min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
 const TableHeading = styled.div`
@@ -51,15 +51,15 @@ const Guard = styled.a`
 function Table({ data }) {
   return (
     <TableWrapper>
-      {data.map(column => {
+      {data.map((column, i) => {
         return (
-          <div key={column.heading}>
+          <div key={column.heading + i}>
             <TableHeading>{column.heading}</TableHeading>
             {column.content &&
-              column.content.map((item, index) => {
+              column.content.map((item, j) => {
                 return (
                   <TableContent
-                    key={item.toString() + index}
+                    key={column.heading + j}
                     status={column.heading === table.STATE && item}
                   >
                     {column.heading === table.GUARD ? (

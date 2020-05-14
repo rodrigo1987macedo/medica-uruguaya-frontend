@@ -5,13 +5,12 @@ import styled from "styled-components";
 
 const BaseModal = styled.div`
   width: 600px;
-  height: 200px;
-  // height: 80vh;
+  height: ${props => props.small ? '200px' : '80vh'};
   overflow-y: scroll;
   padding: 5px;
 `;
 
-function PopUp({ children, buttonText, secondary, onClose }) {
+function PopUp({ children, buttonText, secondary, onClose, small }) {
   const [state, setState] = useState(false);
 
   function togglePopUp() {
@@ -25,7 +24,7 @@ function PopUp({ children, buttonText, secondary, onClose }) {
     <>
       <Buton onClick={togglePopUp} text={buttonText} secondary={secondary} />
       <Modal open={state} onClose={togglePopUp} center>
-        <BaseModal>{children}</BaseModal>
+        <BaseModal small={small}>{children}</BaseModal>
       </Modal>
     </>
   );

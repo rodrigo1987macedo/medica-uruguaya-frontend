@@ -40,7 +40,8 @@ export default () => {
   const [userPassword, setUserPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  async function handleSubmit() {
+  async function handleSubmit(e) {
+    e.preventDefault();
     setErrorMessage("");
     trackPromise(
       axios
@@ -78,6 +79,7 @@ export default () => {
     <FormWrapper>
       <div>
         <Title text="Ingresar" tag="h1" />
+        <form onSubmit={e => handleSubmit(e)} >
         <>
           <Input
             type="email"
@@ -100,7 +102,8 @@ export default () => {
           />
         </>
         <br />
-        <Button text='Ingresar' onClick={() => handleSubmit()} />
+        <Button text='Ingresar'/>
+        </form>
         <Loader error={errorMessage} />
         <Logo src="logo.png" />
       </div>

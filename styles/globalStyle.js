@@ -40,7 +40,11 @@ html {
   -webkit-box-sizing: inherit;
   -moz-box-sizing: inherit;
   box-sizing: inherit;
-  }
+}
+button:focus, input:focus {
+  outline-style: solid;
+  outline-width: medium;
+}
 `;
 
 export default GlobalStyle;

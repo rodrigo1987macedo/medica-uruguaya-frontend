@@ -16,9 +16,10 @@ const cookies = new Cookies();
 function CreateUser() {
   const [createUserState, setCreateUserState] = useState({
     username: "",
-    email: "",
     number: "",
-    password: "not-password-needed"
+    email: "",
+    ci: "",
+    password: ""
   });
   const [newUserOutput, setNewUserOutput] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -26,6 +27,7 @@ function CreateUser() {
     number: undefined,
     username: undefined,
     email: undefined,
+    ci: undefined,
     updated: undefined,
     created: undefined
   });
@@ -44,12 +46,14 @@ function CreateUser() {
         let number = [];
         let username = [];
         let email = [];
+        let ci = [];
         let updated = [];
         let created = [];
         res.data.map(item => {
           number.push(item.number);
           username.push(item.username);
           email.push(item.email);
+          ci.push(item.ci);
           updated.push(item.updatedAt);
           created.push(item.createdAt);
         });
@@ -57,13 +61,16 @@ function CreateUser() {
           number,
           username,
           email,
+          ci,
           updated,
           created
         });
       });
   }, [newUserOutput]);
 
-  function createUser(newUser) {
+  function createUser(e, newUser) {
+    e.preventDefault();
+    newUser.password = newUser.ci;
     trackPromise(
       axios
         .post(`https://arcane-everglades-49934.herokuapp.com/users`, newUser, {
@@ -74,22 +81,26 @@ function CreateUser() {
         .then(res => {
           setCreateUserState({
             username: "",
-            email: "",
             number: "",
-            password: "not-password-needed"
+            email: "",
+            ci: "",
+            password: ""
           });
           let document = res.data.file;
           let username = res.data.username;
           let email = res.data.email;
+          let ci = res.data.ci;
           let number = res.data.number;
           setNewUserOutput({
             number,
             username,
             email,
+            ci,
             document
           });
         })
-        .catch(() => setErrorMessage(status.ERROR))
+        .catch(() => setErrorMessage(status.ERROR)),
+      "create-user"
     );
   }
 
@@ -103,41 +114,49 @@ function CreateUser() {
   return (
     <>
       <Title text={tabs.USERS.CREATE} tag="h1" />
-      <Input
-        placeholder="Nombre"
-        name="username"
-        type="text"
-        value={createUserState.username}
-        onChange={handleCreateUserChange}
-        rightMargin={true}
-      />
-      <Input
-        placeholder="Email"
-        name="email"
-        type="text"
-        value={createUserState.email}
-        onChange={handleCreateUserChange}
-        rightMargin={true}
-      />
-      <Input
-        placeholder="Número"
-        name="number"
-        type="text"
-        value={createUserState.number}
-        onChange={handleCreateUserChange}
-        rightMargin={true}
-      />
-      <Button
-        text="Crear Usuario"
-        onClick={() => createUser(createUserState)}
-      />
-      <Loader error={errorMessage} />
+      <form onSubmit={e => createUser(e, createUserState)}>
+        <Input
+          placeholder="Nombre de funcionario"
+          name="username"
+          type="text"
+          value={createUserState.username}
+          onChange={handleCreateUserChange}
+          rightMargin={true}
+        />
+        <Input
+          placeholder="Email"
+          name="email"
+          type="text"
+          value={createUserState.email}
+          onChange={handleCreateUserChange}
+          rightMargin={true}
+        />
+        <Input
+          placeholder="# funcionario"
+          name="number"
+          type="text"
+          value={createUserState.number}
+          onChange={handleCreateUserChange}
+          rightMargin={true}
+        />
+        <Input
+          placeholder="Cédula"
+          name="ci"
+          type="text"
+          value={createUserState.ci}
+          onChange={handleCreateUserChange}
+          rightMargin={true}
+        />
+        <Button text="Crear Usuario" />
+      </form>
+      <Loader error={errorMessage} area="create-user" />
       <Title text="Historial de usuarios" tag="h2" />
       <Table
         data={[
           { heading: table.NUMBER, content: lastUsers.number },
           { heading: table.NAME, content: lastUsers.username },
           { heading: table.MAIL, content: lastUsers.email },
+          { heading: table.CI, content: lastUsers.ci },
           { heading: table.DATE_MOD, content: lastUsers.updated },
           { heading: table.DATE_CRE, content: lastUsers.created }
         ]}

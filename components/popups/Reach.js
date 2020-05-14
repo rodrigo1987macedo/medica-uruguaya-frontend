@@ -7,7 +7,7 @@ import { trackPromise } from "react-promise-tracker";
 import Loader from "../common/Loader";
 import Table from "../common/Table";
 import { table } from "../../constants/table";
-import PopUp from '../common/PopUp'
+import PopUp from "../common/PopUp";
 
 const cookies = new Cookies();
 
@@ -120,7 +120,8 @@ function Reach() {
         })
         .catch(() => {
           console.log("error");
-        })
+        }),
+      "reach"
     );
   }, []);
 
@@ -132,7 +133,7 @@ function Reach() {
           (reached.length / (reached.length + unreached.length)) * 100
         )}
       />
-      <Loader success={resultMessage} />
+      <Loader success={resultMessage} area="reach" />
       <Result>
         <Title
           text="Funcionarios no enterados"

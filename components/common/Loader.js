@@ -22,8 +22,8 @@ const Loading = styled.div`
   color: ${props => props.theme.colors.process};
 `;
 
-function Loader({ success, error }) {
-  const { promiseInProgress } = usePromiseTracker();
+function Loader({ success, error, area }) {
+  const { promiseInProgress } = usePromiseTracker({ area });
   return (
     <ResultWrapper>
       {promiseInProgress ? (

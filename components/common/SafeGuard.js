@@ -7,7 +7,7 @@ import Loader from "./Loader";
 import { trackPromise } from "react-promise-tracker";
 
 const SafeGuardWrapper = styled.div`
-  > input {
+  input {
     margin: 0 0 15px 0;
   }
 `;
@@ -17,7 +17,8 @@ function SafeGuard({ children }) {
   const [userPassword, setUserPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  async function handleSubmit() {
+  async function handleSubmit(e) {
+    e.preventDefault();
     setErrorMessage("");
     trackPromise(
       axios
@@ -30,7 +31,8 @@ function SafeGuard({ children }) {
         })
         .catch(() => {
           setErrorMessage("Clave incorrecta");
-        })
+        }),
+      "safe-guard"
     );
   }
 
@@ -44,7 +46,7 @@ function SafeGuard({ children }) {
       {isSure ? (
         children
       ) : (
-        <>
+        <form onSubmit={e => handleSubmit(e)}>
           <Input
             type="password"
             id="password"
@@ -54,9 +56,9 @@ function SafeGuard({ children }) {
             placeholder="Clave"
           />
           <br />
-          <Button text="Aceptar" onClick={() => handleSubmit()} />
-          <Loader error={errorMessage} />
-        </>
+          <Button text="Aceptar" />
+          <Loader error={errorMessage} area="safe-guard" />
+        </form>
       )}
     </SafeGuardWrapper>
   );

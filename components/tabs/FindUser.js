@@ -24,7 +24,8 @@ function FindUser() {
   });
   const [errorMessage, setErrorMessage] = useState();
 
-  function findUser(employeeNumber) {
+  function findUser(e, employeeNumber) {
+    e.preventDefault();
     setErrorMessage(null);
     setUserData({
       number: null,
@@ -69,7 +70,8 @@ function FindUser() {
         })
         .catch(() => {
           setErrorMessage(status.ERROR_SERVER);
-        })
+        }),
+      "find-user"
     );
   }
 
@@ -80,15 +82,17 @@ function FindUser() {
   return (
     <>
       <Title text={tabs.USERS.FIND} tag="h1" />
-      <Input
-        placeholder="Número"
-        type="text"
-        value={findUserState}
-        onChange={handleFindUserChange}
-        rightMargin={true}
-      />
-      <Button text={tabs.USERS.FIND} onClick={() => findUser(findUserState)} />
-      <Loader error={errorMessage} />
+      <form onSubmit={e => findUser(e, findUserState)}>
+        <Input
+          placeholder="# funcionario"
+          type="text"
+          value={findUserState}
+          onChange={handleFindUserChange}
+          rightMargin={true}
+        />
+        <Button text={tabs.USERS.FIND} />
+      </form>
+      <Loader error={errorMessage} area="find-user" />
       <Title text="Usuario buscado" tag="h2" />
       <Table
         data={[

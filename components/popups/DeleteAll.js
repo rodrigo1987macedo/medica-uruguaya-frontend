@@ -6,7 +6,6 @@ import Button from "../common/Button";
 import Title from "../common/Title";
 import PopUp from "../common/PopUp";
 import SafeGuard from "../common/SafeGuard";
-import { trackPromise } from "react-promise-tracker";
 
 const cookies = new Cookies();
 
@@ -83,6 +82,7 @@ function DeleteAll() {
       buttonText="Borrar todas las guardias"
       secondary={true}
       onClose={resetState}
+      small={true}
     >
       <Title
         text="Eliminar guardias"
