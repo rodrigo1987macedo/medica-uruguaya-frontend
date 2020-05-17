@@ -7,5 +7,6 @@ export const table = {
   NUMBER: "Número",
   NAME: "Nombre",
   DATE_MOD: "Última Edición",
-  DATE_CRE: "Creación"
+  DATE_CRE: "Creación",
+  ACTIONS: ""
 };

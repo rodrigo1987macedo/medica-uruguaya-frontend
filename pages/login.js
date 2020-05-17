@@ -13,6 +13,7 @@ const FormWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
   width: 100vw;
   height: 100vh;
   input {
@@ -21,7 +22,6 @@ const FormWrapper = styled.div`
   > div {
     text-align: center;
     width: 400px;
-    height: 400px;
     border: 1px solid ${props => props.theme.colors.border2};
     border-radius: 4px;
     padding: 30px 14px;
@@ -29,8 +29,7 @@ const FormWrapper = styled.div`
 `;
 
 const Logo = styled.img`
-  width: 250px;
-  margin: 0;
+  width: 180px;
 `;
 
 export default () => {
@@ -79,32 +78,32 @@ export default () => {
     <FormWrapper>
       <div>
         <Title text="Ingresar" tag="h1" />
-        <form onSubmit={e => handleSubmit(e)} >
-        <>
-          <Input
-            type="email"
-            id="email"
-            name="email"
-            onChange={handleIdentifierChange}
-            value={userIdentifier}
-            placeholder="email"
-          />
-        </>
-        <br />
-        <>
-          <Input
-            type="password"
-            id="password"
-            name="password"
-            onChange={handlePasswordChange}
-            value={userPassword}
-            placeholder="clave"
-          />
-        </>
-        <br />
-        <Button text='Ingresar'/>
+        <form onSubmit={e => handleSubmit(e)}>
+          <div>
+            <Input
+              type="email"
+              badge="Email"
+              id="email"
+              name="email"
+              onChange={handleIdentifierChange}
+              value={userIdentifier}
+            />
+          </div>
+          <br />
+          <div>
+            <Input
+              type="password"
+              badge="Contraseña"
+              id="password"
+              name="password"
+              onChange={handlePasswordChange}
+              value={userPassword}
+            />
+          </div>
+          <br />
+          <Button text="Ingresar" />
         </form>
-        <Loader error={errorMessage} />
+        <Loader error={errorMessage} centered={true} />
         <Logo src="logo.png" />
       </div>
     </FormWrapper>

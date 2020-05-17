@@ -2,9 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const TitleWrapper = styled.div`
-  border-bottom: 1px solid ${props => props.theme.colors.border2};
-  padding: 0 0 10px 0;
-  margin: 0 0 30px 0;
+  margin: 0 0 40px 0;
 `;
 
 const Explanation = styled.div`

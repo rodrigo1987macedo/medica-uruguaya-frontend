@@ -48,12 +48,12 @@ function SafeGuard({ children }) {
       ) : (
         <form onSubmit={e => handleSubmit(e)}>
           <Input
+            badge="Contraseña"
             type="password"
             id="password"
             name="password"
             onChange={handlePasswordChange}
             value={userPassword}
-            placeholder="Clave"
           />
           <br />
           <Button text="Aceptar" />

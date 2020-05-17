@@ -17,11 +17,18 @@ const ButtonWrapper = styled.button`
   border-radius: 4px;
   padding: 4px 10px;
   cursor: pointer;
+  z-index: 2;
+  > img {
+    display: block;
+    width: 15px;
+  }
 `;
 
-function Button({ text, onClick, secondary, danger }) {
+function Button({ text, onClick, secondary, danger, icon }) {
   return (
     <ButtonWrapper onClick={onClick} secondary={secondary} danger={danger}>
+      {icon === "pen" && <img src={icon + ".png"} alt="editar" />}
+      {icon === "trash" && <img src={icon + ".png"} alt="borrar" />}
       {text}
     </ButtonWrapper>
   );

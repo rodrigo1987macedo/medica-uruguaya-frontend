@@ -1,13 +1,14 @@
 export const tabs = {
   USERS: {
-    MANAGE: "Gestionar usuarios",
-    CREATE: "Crear usuario",
-    EDIT: "Editar usuario",
-    DELETE: "Eliminar usuario",
-    FIND: "Buscar usuario"
+    MANAGE: "Funcionarios",
+    CREATE: "Crear funcionario",
+    EDIT: "Editar funcionario",
+    DELETE: "Eliminar funcionario",
+    FIND: "Buscar funcionario",
+    HISTORY: "Historial de funcionarios",
   },
   DOCS: {
-    MANAGE: "Gestionar guardias",
+    MANAGE: "Guardias",
     LOAD: "Cargar guardias",
     DELETE: "Eliminar guardias",
     VERIFY: "Verificar alcance"

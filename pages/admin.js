@@ -22,8 +22,7 @@ const AdminDisplay = styled.div`
 const Br = styled.div`
   width: 100%;
   height: 3px;
-  background: darkgray;
-  // background: ${props => props.theme.colors.border2};
+  background: ${props => props.theme.colors.process};
   margin: 45px 0 40px 0;
 `;
 

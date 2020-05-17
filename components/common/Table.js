@@ -3,11 +3,13 @@ import Moment from "react-moment";
 import styled from "styled-components";
 import { status } from "../../constants/status";
 import { table } from "../../constants/table";
+import DeleteOne from "../popups/DeleteOne";
+import Edit from "../popups/Edit";
 
 const TableWrapper = styled.div`
   display: flex;
   width: 100%;
-  min-height: 80px;
+  min-height: 85px;
   border-bottom: 1px solid ${props => props.theme.colors.border2};
   div {
     flex: 1;
@@ -17,6 +19,7 @@ const TableWrapper = styled.div`
     white-space: nowrap;
   }
 `;
+
 const TableHeading = styled.div`
   display: flex;
   align-items: center;
@@ -28,9 +31,9 @@ const TableHeading = styled.div`
 `;
 
 const TableContent = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   padding: 0 10px;
   height: 46px;
   border-bottom: 1px solid ${props => props.theme.colors.border1};
@@ -42,10 +45,17 @@ const TableContent = styled.div`
       : props.status === status.ERROR
       ? props.theme.colors.error
       : "inherit"};
+  button {
+    margin: 0 5px 0 0;
+  }
 `;
 
 const Guard = styled.a`
   margin: 0 10px 0 0;
+`;
+
+const Actions = styled.div`
+  text-align: center;
 `;
 
 function Table({ data }) {
@@ -65,7 +75,7 @@ function Table({ data }) {
                     {column.heading === table.GUARD ? (
                       item.map(guard => {
                         return (
-                          <div>
+                          <div title={guard.createdAt}>
                             <Guard href={guard.url} download target="_blank">
                               <Moment format="DD/MM/YY">
                                 {guard.createdAt}
@@ -74,18 +84,23 @@ function Table({ data }) {
                           </div>
                         );
                       })
+                    ) : column.heading === table.ACTIONS ? (
+                      <Actions>
+                        <Edit id={item} />
+                        <DeleteOne id={item} />
+                      </Actions>
                     ) : column.heading === table.FILES ? (
-                      item.name
+                      <div title={item.name}>{item.name}</div>
                     ) : column.heading === table.DATE_CRE ||
                       column.heading === table.DATE_MOD ? (
-                      <div>
+                      <div title={item}>
                         Hace{" "}
                         <Moment fromNow ago locale="es">
                           {item}
                         </Moment>
                       </div>
                     ) : (
-                      <div>{item}</div>
+                      <div title={item}>{item}</div>
                     )}
                   </TableContent>
                 );

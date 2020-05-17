@@ -29,7 +29,8 @@ function CreateUser() {
     email: undefined,
     ci: undefined,
     updated: undefined,
-    created: undefined
+    created: undefined,
+    id: undefined
   });
 
   useEffect(() => {
@@ -49,6 +50,7 @@ function CreateUser() {
         let ci = [];
         let updated = [];
         let created = [];
+        let id = [];
         res.data.map(item => {
           number.push(item.number);
           username.push(item.username);
@@ -56,6 +58,7 @@ function CreateUser() {
           ci.push(item.ci);
           updated.push(item.updatedAt);
           created.push(item.createdAt);
+          id.push(item._id);
         });
         setLastUsers({
           number,
@@ -63,7 +66,8 @@ function CreateUser() {
           email,
           ci,
           updated,
-          created
+          created,
+          id
         });
       });
   }, [newUserOutput]);
@@ -116,41 +120,41 @@ function CreateUser() {
       <Title text={tabs.USERS.CREATE} tag="h1" />
       <form onSubmit={e => createUser(e, createUserState)}>
         <Input
-          placeholder="Nombre de funcionario"
           name="username"
+          badge='Nombre'
           type="text"
           value={createUserState.username}
           onChange={handleCreateUserChange}
           rightMargin={true}
         />
         <Input
-          placeholder="Email"
           name="email"
+          badge='Email'
           type="text"
           value={createUserState.email}
           onChange={handleCreateUserChange}
           rightMargin={true}
         />
         <Input
-          placeholder="# funcionario"
           name="number"
+          badge='Número'
           type="text"
           value={createUserState.number}
           onChange={handleCreateUserChange}
           rightMargin={true}
         />
         <Input
-          placeholder="Cédula"
           name="ci"
+          badge='Cédula'
           type="text"
           value={createUserState.ci}
           onChange={handleCreateUserChange}
           rightMargin={true}
         />
-        <Button text="Crear Usuario" />
+        <Button text={tabs.USERS.CREATE} />
       </form>
       <Loader error={errorMessage} area="create-user" />
-      <Title text="Historial de usuarios" tag="h2" />
+      <Title text={tabs.USERS.HISTORY} tag="h2" />
       <Table
         data={[
           { heading: table.NUMBER, content: lastUsers.number },
@@ -158,7 +162,8 @@ function CreateUser() {
           { heading: table.MAIL, content: lastUsers.email },
           { heading: table.CI, content: lastUsers.ci },
           { heading: table.DATE_MOD, content: lastUsers.updated },
-          { heading: table.DATE_CRE, content: lastUsers.created }
+          { heading: table.DATE_CRE, content: lastUsers.created },
+          { heading: table.ACTIONS, content: lastUsers.id }
         ]}
       />
     </>

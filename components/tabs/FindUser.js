@@ -32,7 +32,8 @@ function FindUser() {
       username: null,
       email: null,
       guard: null,
-      ci: null
+      ci: null,
+      id: null
     });
     trackPromise(
       axios
@@ -53,19 +54,22 @@ function FindUser() {
           let email = [];
           let guard = [];
           let ci = [];
+          let id = [];
           res.data.map(item => {
             number.push(item.number);
             username.push(item.username);
             email.push(item.email);
             guard.push(item.file);
             ci.push(item.ci);
+            id.push(item._id);
           });
           setUserData({
             number,
             username,
             email,
             guard,
-            ci
+            ci,
+            id
           });
         })
         .catch(() => {
@@ -84,7 +88,7 @@ function FindUser() {
       <Title text={tabs.USERS.FIND} tag="h1" />
       <form onSubmit={e => findUser(e, findUserState)}>
         <Input
-          placeholder="# funcionario"
+          badge='Número'
           type="text"
           value={findUserState}
           onChange={handleFindUserChange}
@@ -93,14 +97,14 @@ function FindUser() {
         <Button text={tabs.USERS.FIND} />
       </form>
       <Loader error={errorMessage} area="find-user" />
-      <Title text="Usuario buscado" tag="h2" />
       <Table
         data={[
           { heading: table.NUMBER, content: userData.number },
           { heading: table.NAME, content: userData.username },
           { heading: table.MAIL, content: userData.email },
           { heading: table.GUARD, content: userData.guard },
-          { heading: table.CI, content: userData.ci }
+          { heading: table.CI, content: userData.ci },
+          { heading: table.ACTIONS, content: userData.id }
         ]}
       />
     </>
