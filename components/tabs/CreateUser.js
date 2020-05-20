@@ -1,4 +1,5 @@
 import axios from "axios";
+import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import { trackPromise } from "react-promise-tracker";
 import { status } from "../../constants/status";
@@ -10,8 +11,21 @@ import Loader from "../common/Loader";
 import Table from "../common/Table";
 import Title from "../common/Title";
 import { Cookies } from "react-cookie";
+import FindUser from "./FindUser";
+
+const Br = styled.div`
+  width: 100%;
+  height: 3px;
+  background: ${props => props.theme.colors.process};
+  margin: 45px 0 40px 0;
+`;
 
 const cookies = new Cookies();
+
+const FetchMore = styled.div`
+  text-align: center;
+  margin: 30px 0 0 0;
+`;
 
 function CreateUser() {
   const [createUserState, setCreateUserState] = useState({
@@ -23,53 +37,70 @@ function CreateUser() {
   });
   const [newUserOutput, setNewUserOutput] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [canFetchMore, setCanFetchMore] = useState(true);
   const [lastUsers, setLastUsers] = useState({
-    number: undefined,
-    username: undefined,
-    email: undefined,
-    ci: undefined,
-    updated: undefined,
-    created: undefined,
-    id: undefined
+    number: [],
+    username: [],
+    email: [],
+    ci: [],
+    updated: [],
+    created: [],
+    id: []
   });
+  const [fetchedUsersQuantity, setFetchedUserQuantity] = useState(10);
+
+  function fetchMore(from, to) {
+    fetchLastUsers(from, to);
+    setFetchedUserQuantity(to);
+  }
+
+  function fetchLastUsers(from, to) {
+    trackPromise(
+      axios
+        .get(
+          `https://arcane-everglades-49934.herokuapp.com/users?_sort=createdAt:desc&_start=${from}&_limit=${to}`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.get("guards")}`
+            }
+          }
+        )
+        .then(res => {
+          let number = [].concat(from === 0 ? [] : lastUsers.number);
+          let username = [].concat(from === 0 ? [] : lastUsers.username);
+          let email = [].concat(from === 0 ? [] : lastUsers.email);
+          let ci = [].concat(from === 0 ? [] : lastUsers.ci);
+          let updated = [].concat(from === 0 ? [] : lastUsers.updated);
+          let created = [].concat(from === 0 ? [] : lastUsers.created);
+          let id = [].concat(from === 0 ? [] : lastUsers.id);
+          res.data.map(item => {
+            if (item.number == 1) {
+              setCanFetchMore(false);
+            }
+            number.push(item.number);
+            username.push(item.username);
+            email.push(item.email);
+            ci.push(item.ci);
+            updated.push(item.updatedAt);
+            created.push(item.createdAt);
+            id.push(item._id);
+          });
+          setLastUsers({
+            number,
+            username,
+            email,
+            ci,
+            updated,
+            created,
+            id
+          });
+        }),
+      "fetch-last"
+    );
+  }
 
   useEffect(() => {
-    axios
-      .get(
-        `https://arcane-everglades-49934.herokuapp.com/users?_sort=createdAt:desc`,
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.get("guards")}`
-          }
-        }
-      )
-      .then(res => {
-        let number = [];
-        let username = [];
-        let email = [];
-        let ci = [];
-        let updated = [];
-        let created = [];
-        let id = [];
-        res.data.map(item => {
-          number.push(item.number);
-          username.push(item.username);
-          email.push(item.email);
-          ci.push(item.ci);
-          updated.push(item.updatedAt);
-          created.push(item.createdAt);
-          id.push(item._id);
-        });
-        setLastUsers({
-          number,
-          username,
-          email,
-          ci,
-          updated,
-          created,
-          id
-        });
-      });
+    fetchLastUsers(0, fetchedUsersQuantity);
   }, [newUserOutput]);
 
   function createUser(e, newUser) {
@@ -117,11 +148,13 @@ function CreateUser() {
 
   return (
     <>
+      <FindUser onUpdate={() => fetchMore(0, fetchedUsersQuantity)} />
+      <Br />
       <Title text={tabs.USERS.CREATE} tag="h1" />
       <form onSubmit={e => createUser(e, createUserState)}>
         <Input
           name="username"
-          badge='Nombre'
+          badge="Nombre"
           type="text"
           value={createUserState.username}
           onChange={handleCreateUserChange}
@@ -129,7 +162,7 @@ function CreateUser() {
         />
         <Input
           name="email"
-          badge='Email'
+          badge="Email"
           type="text"
           value={createUserState.email}
           onChange={handleCreateUserChange}
@@ -137,7 +170,7 @@ function CreateUser() {
         />
         <Input
           name="number"
-          badge='Número'
+          badge="Número"
           type="text"
           value={createUserState.number}
           onChange={handleCreateUserChange}
@@ -145,7 +178,7 @@ function CreateUser() {
         />
         <Input
           name="ci"
-          badge='Cédula'
+          badge="Cédula"
           type="text"
           value={createUserState.ci}
           onChange={handleCreateUserChange}
@@ -156,6 +189,7 @@ function CreateUser() {
       <Loader error={errorMessage} area="create-user" />
       <Title text={tabs.USERS.HISTORY} tag="h2" />
       <Table
+        onUpdate={() => fetchMore(0, fetchedUsersQuantity)}
         data={[
           { heading: table.NUMBER, content: lastUsers.number },
           { heading: table.NAME, content: lastUsers.username },
@@ -166,6 +200,19 @@ function CreateUser() {
           { heading: table.ACTIONS, content: lastUsers.id }
         ]}
       />
+      {canFetchMore && (
+        <>
+          <FetchMore>
+            <Button
+              onClick={() =>
+                fetchMore(fetchedUsersQuantity, fetchedUsersQuantity + 10)
+              }
+              text="Cargar más"
+            />
+          </FetchMore>
+          <Loader area="fetch-last" centered={true} />
+        </>
+      )}
     </>
   );
 }

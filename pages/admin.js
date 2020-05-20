@@ -68,7 +68,9 @@ function Admin({ data }) {
         <div>
           {data.role.type === "admin" && (
             <Tabs>
-              <Tab onClick={() => setCurrentTab(tabs.DOCS.MANAGE)}>{tabs.DOCS.MANAGE}</Tab>
+              <Tab onClick={() => setCurrentTab(tabs.DOCS.MANAGE)}>
+                {tabs.DOCS.MANAGE}
+              </Tab>
               <Tab onClick={() => setCurrentTab(tabs.USERS.MANAGE)}>
                 {tabs.USERS.MANAGE}
               </Tab>
@@ -83,13 +85,7 @@ function Admin({ data }) {
       {data.role.type === "admin" && (
         <main>
           {currentTab === tabs.DOCS.MANAGE && <LoadFiles />}
-          {currentTab === tabs.USERS.MANAGE && (
-            <>
-              <FindUser />
-              <Br />
-              <CreateUser />
-            </>
-          )}
+          {currentTab === tabs.USERS.MANAGE && <CreateUser />}
         </main>
       )}
       {data.role.type === "authenticated" && (

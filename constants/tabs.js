@@ -5,7 +5,7 @@ export const tabs = {
     EDIT: "Editar funcionario",
     DELETE: "Eliminar funcionario",
     FIND: "Buscar funcionario",
-    HISTORY: "Historial de funcionarios",
+    HISTORY: "Últimos funcionarios",
   },
   DOCS: {
     MANAGE: "Guardias",

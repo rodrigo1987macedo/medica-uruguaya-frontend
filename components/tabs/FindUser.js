@@ -13,7 +13,7 @@ import { Cookies } from "react-cookie";
 
 const cookies = new Cookies();
 
-function FindUser() {
+function FindUser({ onUpdate }) {
   const [findUserState, setFindUserState] = useState();
   const [userData, setUserData] = useState({
     number: undefined,
@@ -24,17 +24,18 @@ function FindUser() {
   });
   const [errorMessage, setErrorMessage] = useState();
 
-  function findUser(e, employeeNumber) {
+  function handleForm(e, employeeNumber) {
     e.preventDefault();
+    findUser(employeeNumber);
+  }
+
+  function handleUpdate(employeeNumber) {
+    findUser(employeeNumber);
+    onUpdate();
+  }
+
+  function findUser(employeeNumber) {
     setErrorMessage(null);
-    setUserData({
-      number: null,
-      username: null,
-      email: null,
-      guard: null,
-      ci: null,
-      id: null
-    });
     trackPromise(
       axios
         .get(
@@ -86,9 +87,9 @@ function FindUser() {
   return (
     <>
       <Title text={tabs.USERS.FIND} tag="h1" />
-      <form onSubmit={e => findUser(e, findUserState)}>
+      <form onSubmit={e => handleForm(e, findUserState)}>
         <Input
-          badge='Número'
+          badge="Número"
           type="text"
           value={findUserState}
           onChange={handleFindUserChange}
@@ -98,6 +99,7 @@ function FindUser() {
       </form>
       <Loader error={errorMessage} area="find-user" />
       <Table
+        onUpdate={() => handleUpdate(findUserState)}
         data={[
           { heading: table.NUMBER, content: userData.number },
           { heading: table.NAME, content: userData.username },

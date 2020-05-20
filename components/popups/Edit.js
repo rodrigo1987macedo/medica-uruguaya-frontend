@@ -11,21 +11,6 @@ import Loader from "../common/Loader";
 
 const cookies = new Cookies();
 
-const Results = styled.div`
-  min-height: 60px;
-  > div {
-    margin: 10px 0;
-  }
-`;
-
-const Warning = styled.div`
-  color: ${props => props.theme.colors.error};
-`;
-
-const Status = styled.div`
-  color: ${props => props.theme.colors.success};
-`;
-
 const Form = styled.form`
   button {
     width: 80px;
@@ -41,7 +26,7 @@ const process = {
   RUNNING: "Modificando..."
 };
 
-function Edit({ id }) {
+function Edit({ id, onUpdate }) {
   const [user, setUser] = useState();
   const [successMessage, setSuccessMessage] = useState();
   const [errorMessage, setErrorMessage] = useState();
@@ -49,46 +34,53 @@ function Edit({ id }) {
   function fetchUser() {
     setErrorMessage(null);
     setSuccessMessage(null);
-      axios
-        .get(`https://arcane-everglades-49934.herokuapp.com/users/${id}`, {
-          headers: {
-            Authorization: `Bearer ${cookies.get("guards")}`
-          }
-        })
-        .then(res => {
-          let data = {
-            number: res.data.number,
-            username: res.data.username,
-            email: res.data.email,
-            ci: res.data.ci
-          };
-          setUser(data);
-        });
-  }
-
-  function edit(e, user) {
-    setErrorMessage(null);
-    setSuccessMessage(null);
-    e.preventDefault();
-    trackPromise(
     axios
-      .put(`https://arcane-everglades-49934.herokuapp.com/users/${id}`, user, {
+      .get(`https://arcane-everglades-49934.herokuapp.com/users/${id}`, {
         headers: {
           Authorization: `Bearer ${cookies.get("guards")}`
         }
       })
-      .then(() => setSuccessMessage(process.FINISHED))
-      .catch(() => {
-        setErrorMessage(process.ERROR);
-      }),
+      .then(res => {
+        let data = {
+          number: res.data.number,
+          username: res.data.username,
+          email: res.data.email,
+          ci: res.data.ci
+        };
+        setUser(data);
+      });
+  }
+
+  function edit(e, user) {
+    e.preventDefault();
+    setErrorMessage(null);
+    setSuccessMessage(null);
+    trackPromise(
+      axios
+        .put(
+          `https://arcane-everglades-49934.herokuapp.com/users/${id}`,
+          user,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.get("guards")}`
+            }
+          }
+        )
+        .then(() => {
+          setSuccessMessage(process.FINISHED);
+          onUpdate();
+        })
+        .catch(() => {
+          setErrorMessage(process.ERROR);
+        }),
       "edit"
     );
   }
 
-  function handleUserEdit(event) {
+  function handleUserEdit(e) {
     setUser({
       ...user,
-      [event.target.name]: event.target.value
+      [e.target.name]: e.target.value
     });
   }
 

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const TitleWrapper = styled.div`
-  margin: 0 0 40px 0;
+  margin: ${props => props.tag === 'h2' ? '0 0 20px 0' : props.tag === 'h1' ? '0 0 40px 0' : '0 0 10px 0 '};
 `;
 
 const Explanation = styled.div`
@@ -21,7 +21,7 @@ const MainTitle = styled.div`
 
 function Title({ text, tag, explanation, danger }) {
   return (
-    <TitleWrapper>
+    <TitleWrapper tag={tag}>
       <MainTitle as={tag} danger={danger}>
         {text}
       </MainTitle>

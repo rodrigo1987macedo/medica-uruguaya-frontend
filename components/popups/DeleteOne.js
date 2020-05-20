@@ -6,22 +6,13 @@ import Button from "../common/Button";
 import Title from "../common/Title";
 import PopUp from "../common/PopUp";
 import SafeGuard from "../common/SafeGuard";
+import Loader from "../common/Loader";
+import { trackPromise } from "react-promise-tracker";
 
 const cookies = new Cookies();
 
-const Results = styled.div`
-  min-height: 60px;
-  > div {
-    margin: 10px 0;
-  }
-`;
-
 const Warning = styled.div`
   color: ${props => props.theme.colors.error};
-`;
-
-const Status = styled.div`
-  color: ${props => props.theme.colors.success};
 `;
 
 const process = {
@@ -30,33 +21,39 @@ const process = {
   RUNNING: "Eliminando..."
 };
 
-function DeleteOne({ id }) {
-  const [status, setStatus] = useState();
-  const [error, setError] = useState();
+function DeleteOne({ id, onUpdate }) {
+  const [successMessage, setSuccessMessage] = useState();
+  const [errorMessage, setErrorMessage] = useState();
 
   function resetState() {
-    setStatus(null);
-    setError(null);
+    setErrorMessage(null);
+    setSuccessMessage(null);
   }
 
   function deleteOne() {
-    setStatus("Procesando...");
-    axios
-      .delete(`https://arcane-everglades-49934.herokuapp.com/users/${id}`, {
-        headers: {
-          Authorization: `Bearer ${cookies.get("guards")}`
-        }
-      })
-      .then(() => setStatus(process.FINISHED))
-      .catch(() => {
-        setStatus(null);
-        setError(process.ERROR);
-      });
+    trackPromise(
+      axios
+        .delete(`https://arcane-everglades-49934.herokuapp.com/users/${id}`, {
+          headers: {
+            Authorization: `Bearer ${cookies.get("guards")}`
+          }
+        })
+        .then(() => {
+          setErrorMessage(null);
+          setSuccessMessage(process.FINISHED);
+          onUpdate();
+        })
+        .catch(() => {
+          setErrorMessage(process.ERROR);
+          setSuccessMessage(null);
+        }),
+      "delete-one"
+    );
   }
 
   return (
     <PopUp
-      buttonIcon='trash'
+      buttonIcon="trash"
       secondary={true}
       onClose={resetState}
       small={true}
@@ -71,12 +68,13 @@ function DeleteOne({ id }) {
         <Button
           onClick={() => deleteOne()}
           danger={true}
-          text='Eliminar funcionario'
+          text="Eliminar funcionario"
         />
-        <Results>
-          <Status>{status}</Status>
-          <Warning>{error}</Warning>
-        </Results>
+        <Loader
+          area="delete-one"
+          success={successMessage}
+          error={errorMessage}
+        />
       </SafeGuard>
     </PopUp>
   );

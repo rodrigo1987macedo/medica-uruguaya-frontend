@@ -58,7 +58,7 @@ const Actions = styled.div`
   text-align: center;
 `;
 
-function Table({ data }) {
+function Table({ data, onUpdate }) {
   return (
     <TableWrapper>
       {data.map((column, i) => {
@@ -86,8 +86,8 @@ function Table({ data }) {
                       })
                     ) : column.heading === table.ACTIONS ? (
                       <Actions>
-                        <Edit id={item} />
-                        <DeleteOne id={item} />
+                        <Edit id={item} onUpdate={() => onUpdate()} />
+                        <DeleteOne id={item} onUpdate={() => onUpdate()}/>
                       </Actions>
                     ) : column.heading === table.FILES ? (
                       <div title={item.name}>{item.name}</div>
