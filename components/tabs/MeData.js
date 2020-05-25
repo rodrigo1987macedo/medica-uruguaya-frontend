@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useEffect } from "react";
-import Moment from "react-moment";
 import styled from "styled-components";
 import { Cookies } from "react-cookie";
+import Guards from "../common/Guards";
 
 const cookies = new Cookies();
 
@@ -27,18 +27,17 @@ const EmptyMessage = styled.div`
 function MeData({ data }) {
   let now = new Date();
   useEffect(() => {
-    axios
-      .put(
-        `https://arcane-everglades-49934.herokuapp.com/users/${data.id}`,
-        {
-          seen: now.toISOString()
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.get("guards")}`
-          }
+    axios.put(
+      `https://arcane-everglades-49934.herokuapp.com/users/${data.id}`,
+      {
+        seen: now.toISOString()
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${cookies.get("guards")}`
         }
-      )
+      }
+    );
   }, []);
 
   return (
@@ -51,12 +50,7 @@ function MeData({ data }) {
         <b>Email:</b> {data.email ? data.email : " -"}
       </div>
       {data.file ? (
-        <a href={data.file.url} download target="_blank">
-          <span>
-            Descargar guardia [
-            <Moment format="DD/MM/YY">{data.file.createdAt}</Moment>]
-          </span>
-        </a>
+        <Guards guardsArr={data.file} />
       ) : (
         <EmptyMessage>No hay guardias</EmptyMessage>
       )}

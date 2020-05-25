@@ -28,16 +28,23 @@ const FetchMore = styled.div`
 `;
 
 function CreateUser() {
-  const [createUserState, setCreateUserState] = useState({
+  //
+  ////// CREATE USER
+  // Create User initial state
+  const [createUser, setCreateUser] = useState({
     username: "",
     number: "",
     email: "",
     ci: "",
     password: ""
   });
-  const [newUserOutput, setNewUserOutput] = useState(null);
+  // Error message for Create User
   const [errorMessage, setErrorMessage] = useState(null);
-  const [canFetchMore, setCanFetchMore] = useState(true);
+
+  ////// LAST USERS
+  // Object with all categories from a Last Users containing
+  // an array of all data of each
+  // to be rendered in last users table
   const [lastUsers, setLastUsers] = useState({
     number: [],
     username: [],
@@ -47,14 +54,21 @@ function CreateUser() {
     created: [],
     id: []
   });
+  // Quantity Last Users table will display
   const [fetchedUsersQuantity, setFetchedUserQuantity] = useState(10);
+  // Boolean setting the capacity of the table to load more Last Users
+  const [showMoreLastUsersButton, setShowMoreLastUsersButton] = useState(true);
 
-  function fetchMore(from, to) {
-    fetchLastUsers(from, to);
+  function moreLastUsersHandler(from, to) {
+    lastUsersHandler(from, to);
     setFetchedUserQuantity(to);
   }
 
-  function fetchLastUsers(from, to) {
+  useEffect(() => {
+    lastUsersHandler(0, fetchedUsersQuantity);
+  }, []);
+
+  function lastUsersHandler(from, to) {
     trackPromise(
       axios
         .get(
@@ -75,7 +89,7 @@ function CreateUser() {
           let id = [].concat(from === 0 ? [] : lastUsers.id);
           res.data.map(item => {
             if (item.number == 1) {
-              setCanFetchMore(false);
+              setShowMoreLastUsersButton(false);
             }
             number.push(item.number);
             username.push(item.username);
@@ -99,39 +113,29 @@ function CreateUser() {
     );
   }
 
-  useEffect(() => {
-    fetchLastUsers(0, fetchedUsersQuantity);
-  }, [newUserOutput]);
-
-  function createUser(e, newUser) {
+  function createUserHandler(e) {
     e.preventDefault();
-    newUser.password = newUser.ci;
+    let newUser = createUser
+    newUser.password = createUser.ci
     trackPromise(
       axios
-        .post(`https://arcane-everglades-49934.herokuapp.com/users`, newUser, {
-          headers: {
-            Authorization: `Bearer ${cookies.get("guards")}`
+        .post(
+          `https://arcane-everglades-49934.herokuapp.com/users`,
+          newUser,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.get("guards")}`
+            }
           }
-        })
-        .then(res => {
-          setCreateUserState({
+        )
+        .then(() => {
+          lastUsersHandler(0, fetchedUsersQuantity);
+          setCreateUser({
             username: "",
             number: "",
             email: "",
             ci: "",
             password: ""
-          });
-          let document = res.data.file;
-          let username = res.data.username;
-          let email = res.data.email;
-          let ci = res.data.ci;
-          let number = res.data.number;
-          setNewUserOutput({
-            number,
-            username,
-            email,
-            ci,
-            document
           });
         })
         .catch(() => setErrorMessage(status.ERROR)),
@@ -140,23 +144,23 @@ function CreateUser() {
   }
 
   function handleCreateUserChange(event) {
-    setCreateUserState({
-      ...createUserState,
+    setCreateUser({
+      ...createUser,
       [event.target.name]: event.target.value
     });
   }
 
   return (
     <>
-      <FindUser onUpdate={() => fetchMore(0, fetchedUsersQuantity)} />
+      <FindUser onUpdate={() => moreLastUsersHandler(0, fetchedUsersQuantity)} />
       <Br />
       <Title text={tabs.USERS.CREATE} tag="h1" />
-      <form onSubmit={e => createUser(e, createUserState)}>
+      <form onSubmit={e => createUserHandler(e)}>
         <Input
           name="username"
           badge="Nombre"
           type="text"
-          value={createUserState.username}
+          value={createUser.username}
           onChange={handleCreateUserChange}
           rightMargin={true}
         />
@@ -164,7 +168,7 @@ function CreateUser() {
           name="email"
           badge="Email"
           type="text"
-          value={createUserState.email}
+          value={createUser.email}
           onChange={handleCreateUserChange}
           rightMargin={true}
         />
@@ -172,7 +176,7 @@ function CreateUser() {
           name="number"
           badge="Número"
           type="text"
-          value={createUserState.number}
+          value={createUser.number}
           onChange={handleCreateUserChange}
           rightMargin={true}
         />
@@ -180,7 +184,7 @@ function CreateUser() {
           name="ci"
           badge="Cédula"
           type="text"
-          value={createUserState.ci}
+          value={createUser.ci}
           onChange={handleCreateUserChange}
           rightMargin={true}
         />
@@ -189,7 +193,7 @@ function CreateUser() {
       <Loader error={errorMessage} area="create-user" />
       <Title text={tabs.USERS.HISTORY} tag="h2" />
       <Table
-        onUpdate={() => fetchMore(0, fetchedUsersQuantity)}
+        onUpdate={() => moreLastUsersHandler(0, fetchedUsersQuantity)}
         data={[
           { heading: table.NUMBER, content: lastUsers.number },
           { heading: table.NAME, content: lastUsers.username },
@@ -200,12 +204,12 @@ function CreateUser() {
           { heading: table.ACTIONS, content: lastUsers.id }
         ]}
       />
-      {canFetchMore && (
+      {showMoreLastUsersButton && (
         <>
           <FetchMore>
             <Button
               onClick={() =>
-                fetchMore(fetchedUsersQuantity, fetchedUsersQuantity + 10)
+                moreLastUsersHandler(fetchedUsersQuantity, fetchedUsersQuantity + 10)
               }
               text="Cargar más"
             />

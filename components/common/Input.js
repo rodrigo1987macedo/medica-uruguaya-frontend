@@ -13,8 +13,6 @@ const InputWrapper = styled.span`
     color: ${props => props.theme.colors.process};
   }
   > input {
-    border-radius: 4px;
-    border: 1px solid ${props => props.theme.colors.border1};
     padding: 8px;
   }
 `;

@@ -8,16 +8,27 @@ import PopUp from "../common/PopUp";
 import Input from "../common/Input";
 import { trackPromise } from "react-promise-tracker";
 import Loader from "../common/Loader";
+import Guards from "../common/Guards";
+import { tabs } from "../../constants/tabs";
 
 const cookies = new Cookies();
 
 const Form = styled.form`
+  padding: 10px 0 0 0;
   button {
     width: 80px;
   }
   input {
     width: 130px;
   }
+`;
+
+const EmptyMessage = styled.div`
+  color: ${props => props.theme.colors.process};
+`;
+
+const LoadFile = styled.div`
+  padding: 0 0 20px 0;
 `;
 
 const process = {
@@ -28,12 +39,20 @@ const process = {
 
 function Edit({ id, onUpdate }) {
   const [user, setUser] = useState();
-  const [successMessage, setSuccessMessage] = useState();
-  const [errorMessage, setErrorMessage] = useState();
+  const [successEditMessage, setSuccessEditMessage] = useState();
+  const [errorEditMessage, setErrorEditMessage] = useState();
+  const [successDeleteMessage, setSuccessDeleteMessage] = useState();
+  const [errorDeleteMessage, setErrorDeleteMessage] = useState();
+
+  function resetState() {
+    setErrorEditMessage(null);
+    setSuccessEditMessage(null);
+    setErrorDeleteMessage(null);
+    setSuccessDeleteMessage(null);
+  }
 
   function fetchUser() {
-    setErrorMessage(null);
-    setSuccessMessage(null);
+    resetState();
     axios
       .get(`https://arcane-everglades-49934.herokuapp.com/users/${id}`, {
         headers: {
@@ -45,16 +64,42 @@ function Edit({ id, onUpdate }) {
           number: res.data.number,
           username: res.data.username,
           email: res.data.email,
-          ci: res.data.ci
+          ci: res.data.ci,
+          files: res.data.file
         };
         setUser(data);
       });
   }
 
+  function deleteGuard(id) {
+    resetState();
+    trackPromise(
+      axios
+        .delete(
+          `https://arcane-everglades-49934.herokuapp.com/upload/files/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.get("guards")}`
+            }
+          }
+        )
+        .then(() => {
+          setErrorDeleteMessage(null);
+          setSuccessDeleteMessage(process.FINISHED);
+          onUpdate();
+          fetchUser()
+        })
+        .catch(() => {
+          setErrorDeleteMessage(process.ERROR);
+          setSuccessDeleteMessage(null);
+        }),
+      "guards"
+    );
+  }
+
   function edit(e, user) {
+    resetState();
     e.preventDefault();
-    setErrorMessage(null);
-    setSuccessMessage(null);
     trackPromise(
       axios
         .put(
@@ -67,11 +112,13 @@ function Edit({ id, onUpdate }) {
           }
         )
         .then(() => {
-          setSuccessMessage(process.FINISHED);
+          setSuccessEditMessage(process.FINISHED);
+          setErrorEditMessage(null);
           onUpdate();
         })
         .catch(() => {
-          setErrorMessage(process.ERROR);
+          setErrorEditMessage(process.ERROR);
+          setSuccessEditMessage(null);
         }),
       "edit"
     );
@@ -85,7 +132,7 @@ function Edit({ id, onUpdate }) {
   }
 
   return (
-    <PopUp onOpen={() => fetchUser()} buttonIcon="pen" small={true}>
+    <PopUp onOpen={() => fetchUser()} buttonIcon="pen">
       <Title
         text="Editar Funcionario"
         explanation="Este proceso modificará los datos editados del funcionario en sistema de manera definitiva"
@@ -93,6 +140,7 @@ function Edit({ id, onUpdate }) {
       />
       {user ? (
         <>
+          <Title text="Datos" tag="h2" />
           <Form onSubmit={e => edit(e, user)}>
             <Input
               badge="Nombre"
@@ -128,7 +176,29 @@ function Edit({ id, onUpdate }) {
             />
             <Button text="Modificar" />
           </Form>
-          <Loader area="edit" success={successMessage} error={errorMessage} />
+          <Loader
+            area="edit"
+            success={successEditMessage}
+            error={errorEditMessage}
+          />
+          <Title text="Guardias" tag="h2" />
+          <LoadFile>
+            {user.files.length !== 0 ? (
+              <Guards
+                guardsArr={user.files}
+                canDelete={id => deleteGuard(id)}
+              />
+            ) : (
+              <EmptyMessage>No hay guardias</EmptyMessage>
+            )}
+          </LoadFile>
+          <Button text={tabs.DOCS.LOAD} />
+          <Input type="file" />
+          <Loader
+            area="guards"
+            success={successDeleteMessage}
+            error={errorDeleteMessage}
+          />
         </>
       ) : (
         <>Procesando...</>

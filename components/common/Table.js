@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import Moment from "react-moment";
 import styled from "styled-components";
 import { status } from "../../constants/status";
 import { table } from "../../constants/table";
 import DeleteOne from "../popups/DeleteOne";
 import Edit from "../popups/Edit";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const TableWrapper = styled.div`
   display: flex;
   width: 100%;
   min-height: 85px;
   border-bottom: 1px solid ${props => props.theme.colors.border2};
-  div {
+  > div {
     flex: 1;
     min-width: 0;
     overflow: hidden;
@@ -50,12 +51,24 @@ const TableContent = styled.div`
   }
 `;
 
+const CellContent = styled(CopyToClipboard)`
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  :active {
+  }
+`;
+
 const Guard = styled.a`
   margin: 0 10px 0 0;
 `;
 
 const Actions = styled.div`
   text-align: center;
+  width: 100%;
 `;
 
 function Table({ data, onUpdate }) {
@@ -75,32 +88,42 @@ function Table({ data, onUpdate }) {
                     {column.heading === table.GUARD ? (
                       item.map(guard => {
                         return (
-                          <div title={guard.createdAt}>
+                          <CellContent
+                            key={guard.url}
+                            title={guard.createdAt}
+                            text={item}
+                          >
                             <Guard href={guard.url} download target="_blank">
                               <Moment format="DD/MM/YY">
                                 {guard.createdAt}
                               </Moment>
                             </Guard>
-                          </div>
+                          </CellContent>
                         );
                       })
                     ) : column.heading === table.ACTIONS ? (
                       <Actions>
                         <Edit id={item} onUpdate={() => onUpdate()} />
-                        <DeleteOne id={item} onUpdate={() => onUpdate()}/>
+                        <DeleteOne id={item} onUpdate={() => onUpdate()} />
                       </Actions>
                     ) : column.heading === table.FILES ? (
-                      <div title={item.name}>{item.name}</div>
+                      <CellContent title={item.name} text={item}>
+                        <div>{item.name}</div>
+                      </CellContent>
                     ) : column.heading === table.DATE_CRE ||
                       column.heading === table.DATE_MOD ? (
-                      <div title={item}>
-                        Hace{" "}
-                        <Moment fromNow ago locale="es">
-                          {item}
-                        </Moment>
-                      </div>
+                      <CellContent title={item} text={item}>
+                        <div>
+                          Hace{" "}
+                          <Moment fromNow ago locale="es">
+                            {item}
+                          </Moment>
+                        </div>
+                      </CellContent>
                     ) : (
-                      <div title={item}>{item}</div>
+                      <CellContent title={item} text={item}>
+                        <div>{item}</div>
+                      </CellContent>
                     )}
                   </TableContent>
                 );
