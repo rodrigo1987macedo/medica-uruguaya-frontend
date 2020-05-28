@@ -3,7 +3,6 @@ import Router from "next/router";
 import React, { useState } from "react";
 import { Cookies } from "react-cookie";
 import styled from "styled-components";
-import FindUser from "../components/tabs/FindUser";
 import Layout from "../components/common/Layout";
 import CreateUser from "../components/tabs/CreateUser";
 import LoadFiles from "../components/tabs/LoadFiles";
@@ -17,13 +16,6 @@ const AdminDisplay = styled.div`
   > div:nth-child(1) {
     margin: 0 18px 0 0;
   }
-`;
-
-const Br = styled.div`
-  width: 100%;
-  height: 3px;
-  background: ${props => props.theme.colors.process};
-  margin: 45px 0 40px 0;
 `;
 
 const Tabs = styled.div`
@@ -52,7 +44,7 @@ function Admin({ data }) {
 
   function logout() {
     cookies.remove("guards");
-    Router.push("/login");
+    Router.push("/");
   }
 
   return (

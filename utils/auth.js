@@ -27,11 +27,11 @@ export async function auth(ctx) {
     .catch(() => {
       if (ctx.res) {
         ctx.res.writeHead(302, {
-          Location: "/login"
+          Location: "/"
         });
         ctx.res.end();
       } else {
-        Router.push("/login");
+        Router.push("/");
       }
     });
 

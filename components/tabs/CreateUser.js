@@ -1,7 +1,8 @@
 import axios from "axios";
-import styled from "styled-components";
 import React, { useEffect, useState } from "react";
+import { Cookies } from "react-cookie";
 import { trackPromise } from "react-promise-tracker";
+import styled from "styled-components";
 import { status } from "../../constants/status";
 import { table } from "../../constants/table";
 import { tabs } from "../../constants/tabs";
@@ -10,8 +11,6 @@ import Input from "../common/Input";
 import Loader from "../common/Loader";
 import Table from "../common/Table";
 import Title from "../common/Title";
-import { Cookies } from "react-cookie";
-import FindUser from "./FindUser";
 
 const Br = styled.div`
   width: 100%;
@@ -29,6 +28,20 @@ const FetchMore = styled.div`
 
 function CreateUser() {
   //
+  ////// FIND USER
+  // Find User initial state
+  const [findUserNumber, setFindUserNumber] = useState();
+  // Found User initial state
+  const [foundUser, setFoundUser] = useState({
+    number: undefined,
+    username: undefined,
+    email: undefined,
+    guard: undefined,
+    ci: undefined
+  });
+  // Error message for Find User
+  const [errorMessageFoundUser, setErrorMessageFoundUser] = useState();
+
   ////// CREATE USER
   // Create User initial state
   const [createUser, setCreateUser] = useState({
@@ -59,11 +72,6 @@ function CreateUser() {
   // Boolean setting the capacity of the table to load more Last Users
   const [showMoreLastUsersButton, setShowMoreLastUsersButton] = useState(true);
 
-  function moreLastUsersHandler(from, to) {
-    lastUsersHandler(from, to);
-    setFetchedUserQuantity(to);
-  }
-
   useEffect(() => {
     lastUsersHandler(0, fetchedUsersQuantity);
   }, []);
@@ -90,14 +98,15 @@ function CreateUser() {
           res.data.map(item => {
             if (item.number == 1) {
               setShowMoreLastUsersButton(false);
+            } else {
+              number.push(item.number);
+              username.push(item.username);
+              email.push(item.email);
+              ci.push(item.ci);
+              updated.push(item.updatedAt);
+              created.push(item.createdAt);
+              id.push(item._id);
             }
-            number.push(item.number);
-            username.push(item.username);
-            email.push(item.email);
-            ci.push(item.ci);
-            updated.push(item.updatedAt);
-            created.push(item.createdAt);
-            id.push(item._id);
           });
           setLastUsers({
             number,
@@ -115,19 +124,15 @@ function CreateUser() {
 
   function createUserHandler(e) {
     e.preventDefault();
-    let newUser = createUser
-    newUser.password = createUser.ci
+    let newUser = createUser;
+    newUser.password = createUser.ci;
     trackPromise(
       axios
-        .post(
-          `https://arcane-everglades-49934.herokuapp.com/users`,
-          newUser,
-          {
-            headers: {
-              Authorization: `Bearer ${cookies.get("guards")}`
-            }
+        .post(`https://arcane-everglades-49934.herokuapp.com/users`, newUser, {
+          headers: {
+            Authorization: `Bearer ${cookies.get("guards")}`
           }
-        )
+        })
         .then(() => {
           lastUsersHandler(0, fetchedUsersQuantity);
           setCreateUser({
@@ -143,6 +148,52 @@ function CreateUser() {
     );
   }
 
+  function findUser(employeeNumber) {
+    setErrorMessageFoundUser(null);
+    trackPromise(
+      axios
+        .get(
+          `https://arcane-everglades-49934.herokuapp.com/users?number=${employeeNumber}`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.get("guards")}`
+            }
+          }
+        )
+        .then(res => {
+          if (res.data.length === 0) {
+            setErrorMessageFoundUser(status.ERROR_USER);
+          }
+          let number = [];
+          let username = [];
+          let email = [];
+          let guard = [];
+          let ci = [];
+          let id = [];
+          res.data.map(item => {
+            number.push(item.number);
+            username.push(item.username);
+            email.push(item.email);
+            guard.push(item.file);
+            ci.push(item.ci);
+            id.push(item._id);
+          });
+          setFoundUser({
+            number,
+            username,
+            email,
+            guard,
+            ci,
+            id
+          });
+        })
+        .catch(() => {
+          setErrorMessageFoundUser(status.ERROR_SERVER);
+        }),
+      "find-user"
+    );
+  }
+
   function handleCreateUserChange(event) {
     setCreateUser({
       ...createUser,
@@ -150,9 +201,46 @@ function CreateUser() {
     });
   }
 
+  function updateFoundUsers(from, to) {
+    lastUsersHandler(from, to);
+    setFetchedUserQuantity(to);
+    findUserNumber && findUser(findUserNumber);
+  }
+
+  function findUserHandler(e) {
+    e.preventDefault();
+    findUser(findUserNumber);
+  }
+
+  function handleFindUserChange(event) {
+    setFindUserNumber(event.target.value);
+  }
+
   return (
     <>
-      <FindUser onUpdate={() => moreLastUsersHandler(0, fetchedUsersQuantity)} />
+      <Title text={tabs.USERS.FIND} tag="h1" />
+      <form onSubmit={e => findUserHandler(e)}>
+        <Input
+          badge="Número"
+          type="text"
+          value={findUserNumber}
+          onChange={handleFindUserChange}
+          rightMargin={true}
+        />
+        <Button text={tabs.USERS.FIND} />
+      </form>
+      <Loader error={errorMessageFoundUser} area="find-user" />
+      <Table
+        onUpdate={() => updateFoundUsers(0, fetchedUsersQuantity)}
+        data={[
+          { heading: table.NUMBER, content: foundUser.number },
+          { heading: table.NAME, content: foundUser.username },
+          { heading: table.MAIL, content: foundUser.email },
+          { heading: table.GUARD, content: foundUser.guard },
+          { heading: table.CI, content: foundUser.ci },
+          { heading: table.ACTIONS, content: foundUser.id }
+        ]}
+      />
       <Br />
       <Title text={tabs.USERS.CREATE} tag="h1" />
       <form onSubmit={e => createUserHandler(e)}>
@@ -193,7 +281,7 @@ function CreateUser() {
       <Loader error={errorMessage} area="create-user" />
       <Title text={tabs.USERS.HISTORY} tag="h2" />
       <Table
-        onUpdate={() => moreLastUsersHandler(0, fetchedUsersQuantity)}
+        onUpdate={() => updateFoundUsers(0, fetchedUsersQuantity)}
         data={[
           { heading: table.NUMBER, content: lastUsers.number },
           { heading: table.NAME, content: lastUsers.username },
@@ -209,7 +297,10 @@ function CreateUser() {
           <FetchMore>
             <Button
               onClick={() =>
-                moreLastUsersHandler(fetchedUsersQuantity, fetchedUsersQuantity + 10)
+                updateFoundUsers(
+                  fetchedUsersQuantity,
+                  fetchedUsersQuantity + 10
+                )
               }
               text="Cargar más"
             />

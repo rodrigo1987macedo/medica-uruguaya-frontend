@@ -52,14 +52,11 @@ const TableContent = styled.div`
 `;
 
 const CellContent = styled(CopyToClipboard)`
-  flex: 1;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
-  :active {
-  }
 `;
 
 const Guard = styled.a`

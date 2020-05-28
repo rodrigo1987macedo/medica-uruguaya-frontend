@@ -27,10 +27,6 @@ const EmptyMessage = styled.div`
   color: ${props => props.theme.colors.process};
 `;
 
-const LoadFile = styled.div`
-  padding: 0 0 20px 0;
-`;
-
 const process = {
   FINISHED: "Funcionario modificado con éxito",
   ERROR: "Ha ocurrido un error",
@@ -87,13 +83,13 @@ function Edit({ id, onUpdate }) {
           setErrorDeleteMessage(null);
           setSuccessDeleteMessage(process.FINISHED);
           onUpdate();
-          fetchUser()
+          fetchUser();
         })
         .catch(() => {
           setErrorDeleteMessage(process.ERROR);
           setSuccessDeleteMessage(null);
         }),
-      "guards"
+      "delete-guard"
     );
   }
 
@@ -182,20 +178,13 @@ function Edit({ id, onUpdate }) {
             error={errorEditMessage}
           />
           <Title text="Guardias" tag="h2" />
-          <LoadFile>
-            {user.files.length !== 0 ? (
-              <Guards
-                guardsArr={user.files}
-                canDelete={id => deleteGuard(id)}
-              />
-            ) : (
-              <EmptyMessage>No hay guardias</EmptyMessage>
-            )}
-          </LoadFile>
-          <Button text={tabs.DOCS.LOAD} />
-          <Input type="file" />
+          {user.files.length !== 0 ? (
+            <Guards guardsArr={user.files} canDelete={id => deleteGuard(id)} />
+          ) : (
+            <EmptyMessage>No hay guardias</EmptyMessage>
+          )}
           <Loader
-            area="guards"
+            area="delte-guard"
             success={successDeleteMessage}
             error={errorDeleteMessage}
           />
