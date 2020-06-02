@@ -32,30 +32,60 @@ const Logo = styled.img`
   width: 180px;
 `;
 
+const Forgot = styled.div`
+  margin: 10px 0 0 0;
+  text-decoration: underline;
+  font-size: 12px;
+  z-index: 2;
+  cursor: pointer;
+`;
+
 export default () => {
   const router = useRouter();
   const [cookies, setCookie] = useCookies(["guards"]);
   const [userIdentifier, setUserIdentifier] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [emailSent, setEmailSent] = useState("");
+
+  function forgotPassword() {
+    setErrorMessage("");
+    setEmailSent("");
+    trackPromise(
+      axios
+        .post(
+          "https://arcane-everglades-49934.herokuapp.com/auth/forgot-password",
+          {
+            email: userIdentifier
+          }
+        )
+        .then(() => {
+          setEmailSent("Se ha enviado un mail a tu casilla de correo");
+        })
+        .catch(() => {
+          setErrorMessage("Error en el servidor");
+        })
+    );
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
     setErrorMessage("");
+    setEmailSent("");
     trackPromise(
       axios
         .post("https://arcane-everglades-49934.herokuapp.com/auth/local", {
           identifier: userIdentifier,
           password: userPassword
         })
-        .then(function(response) {
-          if (response.data) {
-            setCookie("guards", response.data.jwt, { path: "/" });
+        .then(res => {
+          if (res.data) {
+            setCookie("guards", res.data.jwt, { path: "/" });
             router.push("/admin");
           }
         })
-        .catch(function(error) {
-          if (error.response) {
+        .catch(err => {
+          if (err.response) {
             setErrorMessage("Usuario o clave incorrectos");
           } else {
             setErrorMessage("Error en el servidor");
@@ -102,8 +132,9 @@ export default () => {
           </div>
           <br />
           <Button text="Ingresar" />
+          <Forgot onClick={() => forgotPassword()}>Olvidé mi contraseña</Forgot>
         </form>
-        <Loader error={errorMessage} centered={true} />
+        <Loader error={errorMessage} success={emailSent} centered={true} />
         <Logo src="logo.png" />
       </div>
     </FormWrapper>

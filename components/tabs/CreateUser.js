@@ -26,6 +26,24 @@ const FetchMore = styled.div`
   margin: 30px 0 0 0;
 `;
 
+const Form = styled.form`
+  @media (max-width: 1200px) {
+    display: flex;
+    flex-direction: column;
+  }
+  > span > span {
+    @media (max-width: 1000px) {
+      top: -15px;
+    }
+  }
+  input {
+    margin: 0 10px 0 0;
+    @media (max-width: 1000px) {
+      margin: 0 0 30px 0;
+    }
+  }
+`;
+
 function CreateUser() {
   //
   ////// FIND USER
@@ -243,14 +261,13 @@ function CreateUser() {
       />
       <Br />
       <Title text={tabs.USERS.CREATE} tag="h1" />
-      <form onSubmit={e => createUserHandler(e)}>
+      <Form onSubmit={e => createUserHandler(e)}>
         <Input
           name="username"
           badge="Nombre"
           type="text"
           value={createUser.username}
           onChange={handleCreateUserChange}
-          rightMargin={true}
         />
         <Input
           name="email"
@@ -258,7 +275,6 @@ function CreateUser() {
           type="text"
           value={createUser.email}
           onChange={handleCreateUserChange}
-          rightMargin={true}
         />
         <Input
           name="number"
@@ -266,7 +282,6 @@ function CreateUser() {
           type="text"
           value={createUser.number}
           onChange={handleCreateUserChange}
-          rightMargin={true}
         />
         <Input
           name="ci"
@@ -274,10 +289,9 @@ function CreateUser() {
           type="text"
           value={createUser.ci}
           onChange={handleCreateUserChange}
-          rightMargin={true}
         />
         <Button text={tabs.USERS.CREATE} />
-      </form>
+      </Form>
       <Loader error={errorMessage} area="create-user" />
       <Title text={tabs.USERS.HISTORY} tag="h2" />
       <Table

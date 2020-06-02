@@ -15,9 +15,6 @@ const MeDataWrapper = styled.div`
     text-transform: uppercase;
     color: ${props => props.theme.colors.primary};
   }
-  a {
-    color: ${props => props.theme.colors.primary};
-  }
 `;
 
 const EmptyMessage = styled.div`
@@ -44,10 +41,10 @@ function MeData({ data }) {
     <MeDataWrapper>
       <div>#{data.number ? data.number : " -"}</div>
       <div>
-        <b>Nombre:</b> {data.username ? data.username : " -"}
+        {data.username ? data.username : " -"}
       </div>
       <div>
-        <b>Email:</b> {data.email ? data.email : " -"}
+        {data.email ? data.email : " -"}
       </div>
       {data.file ? (
         <Guards guardsArr={data.file} />

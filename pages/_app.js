@@ -18,6 +18,7 @@ const theme = {
     success: '#008000',
     error: '#B22222',
     process: '#808080',
+    dark: '#333333'
   }
 };
 

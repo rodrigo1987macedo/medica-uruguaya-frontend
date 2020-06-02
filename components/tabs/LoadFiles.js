@@ -56,17 +56,20 @@ function LoadFiles() {
   async function recursiveUploadChain(files) {
     const nextFile = files.shift();
     const nextFileIndex = loadedFilesLength - files.length - 1;
-
+    console.log('recursiveUploadChain files: ', nextFile)
     setIsLoading(true);
+
+    function getUserNumber(file) {
+      return file.name.split(".")[0].split("-")[0];
+    }
 
     if (nextFile) {
       setLoadingStatus(nextFileIndex, status.PENDING);
       return axios
         .get(
-          `https://arcane-everglades-49934.herokuapp.com/users?number=${nextFile.name
-            .split(".")
-            .slice(0, -1)
-            .join(".")}`,
+          `https://arcane-everglades-49934.herokuapp.com/users?number=${getUserNumber(
+            nextFile
+          )}`,
           {
             headers: {
               Authorization: `Bearer ${cookies.get("guards")}`
@@ -75,7 +78,7 @@ function LoadFiles() {
         )
         .then(result => {
           result.data[0].file.map((item, index) => {
-            if (index >= 2) {
+            if (index >= 3) {
               axios.delete(
                 `https://arcane-everglades-49934.herokuapp.com/upload/files/${
                   item._id

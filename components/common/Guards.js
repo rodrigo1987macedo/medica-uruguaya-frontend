@@ -4,11 +4,13 @@ import Moment from "react-moment";
 
 const GuardsWrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  margin: 10px 0 0 0;
   a {
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: inherit;
+    color: ${props => props.theme.colors.dark};
     cursor: pointer;
   }
   time {
@@ -20,30 +22,56 @@ const GuardsWrapper = styled.div`
 const Guard = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-direction: column;
   font-size: 12px;
   background-color: ${props => props.theme.colors.border1};
-  padding: 5px;
   border-radius: 4px;
-  margin: 0 6px 0 0;
+  border: 2px solid ${props => props.theme.colors.process};
+  margin: 0 14px 14px 0;
+  > a {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
 `;
 
 const Img = styled.img`
   display: block;
-  width: 13px;
-  margin: 0 4px 0 0;
+  width: 40px;
+  margin: 0 0 10px 0;
+`;
+
+const GuardSection = styled.div`
+  text-align: center;
+  > div:nth-child(3) {
+    padding: 5px 0 0 0;
+  }
 `;
 
 const Delete = styled.div`
+  background-color: ${props => props.theme.colors.border2};
+  padding: 4px 6px;
+  border-radius: 2px;
+  margin: 0 0 10px 0;
   cursor: pointer;
-  z-index: 2;
+  z-index: 100;
   > img {
     display: block;
     width: 12px;
-    margin: 0 0 0 5px;
   }
 `;
 
 function Guards({ guardsArr, canDelete }) {
+  const getMonth = (number, createdAt) => {
+    let createdAtDate = new Date(createdAt);
+    if (number) {
+      let givenMonth = parseInt(number, 10);
+      createdAtDate.setMonth(givenMonth - 1);
+    }
+    return createdAtDate.toISOString();
+  };
+
   return (
     <GuardsWrapper>
       {guardsArr.map(item => {
@@ -51,11 +79,21 @@ function Guards({ guardsArr, canDelete }) {
           <Guard key={item.url}>
             <a href={item.url} download target="_blank">
               <Img src="file.png" alt="guardia" />
-              <Moment format="DD/MM/YY">{item.date}</Moment>
+              <GuardSection>
+                <div>Publicación:</div>
+                <Moment format="DD/MM/YY">{item.createdAt}</Moment>
+                <div>Mes:</div>
+                <Moment format="MMMM" withTitle locale="es">
+                  {getMonth(
+                    item.name.split(".")[0].split("-")[1],
+                    item.createdAt
+                  )}
+                </Moment>
+              </GuardSection>
             </a>
             {canDelete && (
               <Delete onClick={() => canDelete(item._id)}>
-                <img src="close.png" alt="borrar" />
+                Eliminar
               </Delete>
             )}
           </Guard>

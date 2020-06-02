@@ -12,10 +12,11 @@ const TableWrapper = styled.div`
   width: 100%;
   min-height: 85px;
   border-bottom: 1px solid ${props => props.theme.colors.border2};
+  overflow: scroll;
   > div {
     flex: 1;
-    min-width: 0;
     overflow: hidden;
+    min-width: 125px;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -59,13 +60,36 @@ const CellContent = styled(CopyToClipboard)`
   cursor: pointer;
 `;
 
-const Guard = styled.a`
-  margin: 0 10px 0 0;
-`;
-
 const Actions = styled.div`
   text-align: center;
   width: 100%;
+`;
+
+const Guard = styled.div`
+  position: relative;
+  overflow: visible;
+`;
+
+const Month = styled(Moment)`
+  position: absolute;
+  top: -7px;
+  right: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 18px;
+  height: 18px;
+  font-size: 8px;
+  background: ${props => props.theme.colors.dark};
+  border-radius: 100%;
+  color: ${props => props.theme.colors.background1};
+  line-height: 6px;
+`;
+
+const Img = styled.img`
+  display: block;
+  width: 19px;
+  margin: 0 18px 0 0;
 `;
 
 function Table({ data, onUpdate }) {
@@ -90,10 +114,11 @@ function Table({ data, onUpdate }) {
                             title={guard.createdAt}
                             text={item}
                           >
-                            <Guard href={guard.url} download target="_blank">
-                              <Moment format="DD/MM/YY">
-                                {guard.createdAt}
-                              </Moment>
+                            <Guard>
+                              <Month format="MM" locale="es">
+                                <div>{guard.createdAt}</div>
+                              </Month>
+                              <Img src="file.png" alt="guardia" />
                             </Guard>
                           </CellContent>
                         );

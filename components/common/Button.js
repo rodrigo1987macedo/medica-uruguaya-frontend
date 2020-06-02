@@ -17,6 +17,7 @@ const ButtonWrapper = styled.button`
   border-radius: 4px;
   padding: 4px 10px;
   cursor: pointer;
+  max-width: 182px;
   z-index: 2;
   > img {
     display: block;

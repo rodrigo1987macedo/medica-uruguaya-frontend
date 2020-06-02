@@ -9,7 +9,6 @@ import Input from "../common/Input";
 import { trackPromise } from "react-promise-tracker";
 import Loader from "../common/Loader";
 import Guards from "../common/Guards";
-import { tabs } from "../../constants/tabs";
 
 const cookies = new Cookies();
 

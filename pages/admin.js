@@ -11,6 +11,31 @@ import Navbar from "../components/common/Navbar";
 import { auth } from "../utils/auth";
 import MeData from "../components/tabs/MeData";
 
+const NavbarSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  @media (max-width: 600px) {
+    flex-direction: column-reverse;
+    :nth-child(2) {
+      > div:nth-child(1) {
+        margin: 12px 0 0 0;
+        padding: 14px 0 0 0;
+        border-top: 1px solid ${props => props.theme.colors.border2};
+      }
+    }
+  }
+  :nth-child(2) {
+    margin: 28px 0 0 0;
+    @media (max-width: 600px) {
+      margin: 12px 0 0 0;
+    }
+  }
+  img {
+    width: 260px;
+  }
+`;
+
 const AdminDisplay = styled.div`
   display: flex;
   > div:nth-child(1) {
@@ -50,14 +75,14 @@ function Admin({ data }) {
   return (
     <Layout>
       <Navbar>
-        <div>
+        <NavbarSection>
           <Link href="/">
             <a>
               <img src="/logo.png" alt="logo" />
             </a>
           </Link>
-        </div>
-        <div>
+        </NavbarSection>
+        <NavbarSection>
           {data.role.type === "admin" && (
             <Tabs>
               <Tab onClick={() => setCurrentTab(tabs.DOCS.MANAGE)}>
@@ -72,7 +97,7 @@ function Admin({ data }) {
             <div>Bienvenido, {data.username}</div>
             <Tab onClick={() => logout()}>Cerrar sesión</Tab>
           </AdminDisplay>
-        </div>
+        </NavbarSection>
       </Navbar>
       {data.role.type === "admin" && (
         <main>

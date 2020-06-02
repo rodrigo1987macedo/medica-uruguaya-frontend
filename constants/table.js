@@ -3,7 +3,7 @@ export const table = {
   GUARD: "Guardias",
   CI: "Cédula",
   STATE: "Estado",
-  MAIL: "Mail",
+  MAIL: "Email",
   NUMBER: "Número",
   NAME: "Nombre",
   DATE_MOD: "Última Edición",
