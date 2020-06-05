@@ -32,13 +32,13 @@ const Form = styled.form`
     flex-direction: column;
   }
   > span > span {
-    @media (max-width: 1000px) {
+    @media (max-width: 1200px) {
       top: -15px;
     }
   }
   input {
     margin: 0 10px 0 0;
-    @media (max-width: 1000px) {
+    @media (max-width: 1200px) {
       margin: 0 0 30px 0;
     }
   }
@@ -48,7 +48,7 @@ function CreateUser() {
   //
   ////// FIND USER
   // Find User initial state
-  const [findUserNumber, setFindUserNumber] = useState();
+  const [findUserNumber, setFindUserNumber] = useState("");
   // Found User initial state
   const [foundUser, setFoundUser] = useState({
     number: undefined,
@@ -92,7 +92,41 @@ function CreateUser() {
 
   useEffect(() => {
     lastUsersHandler(0, fetchedUsersQuantity);
-  }, []);
+    console.log('render')
+  }, [lastUsers]);
+
+  const updateLastUsers = (res, from) => {
+    let number = [].concat(from === 0 ? [] : lastUsers.number);
+    let username = [].concat(from === 0 ? [] : lastUsers.username);
+    let email = [].concat(from === 0 ? [] : lastUsers.email);
+    let ci = [].concat(from === 0 ? [] : lastUsers.ci);
+    let updated = [].concat(from === 0 ? [] : lastUsers.updated);
+    let created = [].concat(from === 0 ? [] : lastUsers.created);
+    let id = [].concat(from === 0 ? [] : lastUsers.id);
+    res.data.map(item => {
+      if (item.number == 1) {
+        setShowMoreLastUsersButton(false);
+      } else {
+        number.push(item.number);
+        username.push(item.username);
+        email.push(item.email);
+        ci.push(item.ci);
+        updated.push(item.updatedAt);
+        created.push(item.createdAt);
+        id.push(item._id);
+      }
+    });
+    const updatedLastUsers = {
+      number,
+      username,
+      email,
+      ci,
+      updated,
+      created,
+      id
+    };
+    return updatedLastUsers;
+  };
 
   function lastUsersHandler(from, to) {
     trackPromise(
@@ -106,35 +140,7 @@ function CreateUser() {
           }
         )
         .then(res => {
-          let number = [].concat(from === 0 ? [] : lastUsers.number);
-          let username = [].concat(from === 0 ? [] : lastUsers.username);
-          let email = [].concat(from === 0 ? [] : lastUsers.email);
-          let ci = [].concat(from === 0 ? [] : lastUsers.ci);
-          let updated = [].concat(from === 0 ? [] : lastUsers.updated);
-          let created = [].concat(from === 0 ? [] : lastUsers.created);
-          let id = [].concat(from === 0 ? [] : lastUsers.id);
-          res.data.map(item => {
-            if (item.number == 1) {
-              setShowMoreLastUsersButton(false);
-            } else {
-              number.push(item.number);
-              username.push(item.username);
-              email.push(item.email);
-              ci.push(item.ci);
-              updated.push(item.updatedAt);
-              created.push(item.createdAt);
-              id.push(item._id);
-            }
-          });
-          setLastUsers({
-            number,
-            username,
-            email,
-            ci,
-            updated,
-            created,
-            id
-          });
+          setLastUsers(updateLastUsers(res, from))
         }),
       "fetch-last"
     );
@@ -142,6 +148,7 @@ function CreateUser() {
 
   function createUserHandler(e) {
     e.preventDefault();
+    setErrorMessage("");
     let newUser = createUser;
     newUser.password = createUser.ci;
     trackPromise(
@@ -237,16 +244,17 @@ function CreateUser() {
   return (
     <>
       <Title text={tabs.USERS.FIND} tag="h1" />
-      <form onSubmit={e => findUserHandler(e)}>
+      <Form onSubmit={e => findUserHandler(e)}>
         <Input
           badge="Número"
           type="text"
+          autocomplete="on"
           value={findUserNumber}
           onChange={handleFindUserChange}
           rightMargin={true}
         />
         <Button text={tabs.USERS.FIND} />
-      </form>
+      </Form>
       <Loader error={errorMessageFoundUser} area="find-user" />
       <Table
         onUpdate={() => updateFoundUsers(0, fetchedUsersQuantity)}
@@ -264,6 +272,7 @@ function CreateUser() {
       <Form onSubmit={e => createUserHandler(e)}>
         <Input
           name="username"
+          autocomplete="on"
           badge="Nombre"
           type="text"
           value={createUser.username}
@@ -271,6 +280,7 @@ function CreateUser() {
         />
         <Input
           name="email"
+          autocomplete="on"
           badge="Email"
           type="text"
           value={createUser.email}
@@ -278,6 +288,7 @@ function CreateUser() {
         />
         <Input
           name="number"
+          autocomplete="on"
           badge="Número"
           type="text"
           value={createUser.number}
@@ -285,6 +296,7 @@ function CreateUser() {
         />
         <Input
           name="ci"
+          autocomplete="on"
           badge="Cédula"
           type="text"
           value={createUser.ci}
@@ -294,18 +306,20 @@ function CreateUser() {
       </Form>
       <Loader error={errorMessage} area="create-user" />
       <Title text={tabs.USERS.HISTORY} tag="h2" />
-      <Table
-        onUpdate={() => updateFoundUsers(0, fetchedUsersQuantity)}
-        data={[
-          { heading: table.NUMBER, content: lastUsers.number },
-          { heading: table.NAME, content: lastUsers.username },
-          { heading: table.MAIL, content: lastUsers.email },
-          { heading: table.CI, content: lastUsers.ci },
-          { heading: table.DATE_MOD, content: lastUsers.updated },
-          { heading: table.DATE_CRE, content: lastUsers.created },
-          { heading: table.ACTIONS, content: lastUsers.id }
-        ]}
-      />
+      {lastUsers && (
+        <Table
+          onUpdate={() => updateFoundUsers(0, fetchedUsersQuantity)}
+          data={[
+            { heading: table.NUMBER, content: lastUsers.number },
+            { heading: table.NAME, content: lastUsers.username },
+            { heading: table.MAIL, content: lastUsers.email },
+            { heading: table.CI, content: lastUsers.ci },
+            { heading: table.DATE_MOD, content: lastUsers.updated },
+            { heading: table.DATE_CRE, content: lastUsers.created },
+            { heading: table.ACTIONS, content: lastUsers.id }
+          ]}
+        />
+      )}
       {showMoreLastUsersButton && (
         <>
           <FetchMore>

@@ -18,21 +18,24 @@ const NavbarSection = styled.div`
   @media (max-width: 600px) {
     flex-direction: column-reverse;
     :nth-child(2) {
-      > div:nth-child(1) {
-        margin: 12px 0 0 0;
-        padding: 14px 0 0 0;
-        border-top: 1px solid ${props => props.theme.colors.border2};
+      > div:nth-child(2) {
+        margin: 0 0 10px 0;
+        padding: 0 0 8px 0;
+        border-bottom: 1px solid ${props => props.theme.colors.border2};
       }
     }
   }
   :nth-child(2) {
     margin: 28px 0 0 0;
     @media (max-width: 600px) {
-      margin: 12px 0 0 0;
+      margin: 0;
     }
   }
   img {
     width: 260px;
+    @media (max-width: 600px) {
+      margin: 0 0 10px 0;
+    }
   }
 `;
 
@@ -73,7 +76,7 @@ function Admin({ data }) {
   }
 
   return (
-    <Layout>
+    <Layout title='Gestión de guardias | Médica Uruguaya' description='Sistema de gestión de guardias'>
       <Navbar>
         <NavbarSection>
           <Link href="/">

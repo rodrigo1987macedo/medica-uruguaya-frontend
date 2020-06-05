@@ -8,6 +8,7 @@ import Button from "../components/common/Button";
 import Input from "../components/common/Input";
 import Loader from "../components/common/Loader";
 import Title from "../components/common/Title";
+import Layout from "../components/common/Layout";
 
 const FormWrapper = styled.div`
   display: flex;
@@ -76,37 +77,43 @@ function Restore({ privateCode }) {
   };
 
   return (
-    <FormWrapper>
-      <div>
-        <Title text="Cambiar contraseña" tag="h1" />
-        <form onSubmit={e => handleSubmit(e)}>
-          <div>
-            <Input
-              type="password"
-              badge="Nueva contraseña"
-              id="password"
-              name="password"
-              onChange={handleNewPasswordChange}
-              value={newUserPassword}
-            />
-          </div>
-          <br />
-          <div>
-            <Input
-              type="password"
-              badge="Confirmar contraseña"
-              id="password"
-              name="password"
-              onChange={handleNewConfirmedPasswordChange}
-              value={confirmedNewUserPassword}
-            />
-          </div>
-          <Button text="Cambiar" />
-        </form>
-        <Loader error={errorMessage} centered={true} />
-        <Logo src="logo.png" />
-      </div>
-    </FormWrapper>
+    <Layout
+      title="Cambiar contraseña de Gestión de guardias | Médica Uruguaya"
+      description="Cambiar contraseña de sistema de gestión de guardias"
+      whiteBackground
+    >
+      <FormWrapper>
+        <div>
+          <Title text="Cambiar contraseña" tag="h1" />
+          <form onSubmit={e => handleSubmit(e)}>
+            <div>
+              <Input
+                type="password"
+                badge="Nueva contraseña"
+                id="password"
+                name="password"
+                onChange={handleNewPasswordChange}
+                value={newUserPassword}
+              />
+            </div>
+            <br />
+            <div>
+              <Input
+                type="password"
+                badge="Confirmar contraseña"
+                id="password"
+                name="password"
+                onChange={handleNewConfirmedPasswordChange}
+                value={confirmedNewUserPassword}
+              />
+            </div>
+            <Button text="Cambiar" />
+          </form>
+          <Loader error={errorMessage} centered={true} />
+          <Logo src="logo.png" />
+        </div>
+      </FormWrapper>
+    </Layout>
   );
 }
 

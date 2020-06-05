@@ -39,12 +39,12 @@ function MeData({ data }) {
 
   return (
     <MeDataWrapper>
-      <div>#{data.number ? data.number : " -"}</div>
+      <div>#{data.number ? data.number : "-"}</div>
       <div>
-        {data.username ? data.username : " -"}
+        {data.username ? data.username : "-"}
       </div>
       <div>
-        {data.email ? data.email : " -"}
+        {data.email ? data.email : "-"}
       </div>
       {data.file ? (
         <Guards guardsArr={data.file} />

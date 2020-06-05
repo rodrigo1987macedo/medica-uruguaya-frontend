@@ -16,9 +16,12 @@ const TableWrapper = styled.div`
   > div {
     flex: 1;
     overflow: hidden;
-    min-width: 125px;
     text-overflow: ellipsis;
     white-space: nowrap;
+    min-width: 125px;
+    @media (max-width: 1200px) {
+      min-width: 200px;
+    }
   }
 `;
 
@@ -44,6 +47,8 @@ const TableContent = styled.div`
       ? props.theme.colors.process
       : props.status === status.SUCCESS
       ? props.theme.colors.success
+      : props.status === status.WARNING
+      ? props.theme.colors.warning
       : props.status === status.ERROR
       ? props.theme.colors.error
       : "inherit"};
@@ -65,7 +70,7 @@ const Actions = styled.div`
   width: 100%;
 `;
 
-const Guard = styled.div`
+const Guard = styled.a`
   position: relative;
   overflow: visible;
 `;
@@ -114,7 +119,7 @@ function Table({ data, onUpdate }) {
                             title={guard.createdAt}
                             text={item}
                           >
-                            <Guard>
+                            <Guard href={guard.url} target="_blank">
                               <Month format="MM" locale="es">
                                 <div>{guard.createdAt}</div>
                               </Month>

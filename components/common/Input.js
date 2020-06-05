@@ -14,6 +14,7 @@ const InputWrapper = styled.span`
   }
   > input {
     padding: 8px;
+    border: 1px solid ${props => props.theme.colors.border2};
   }
 `;
 

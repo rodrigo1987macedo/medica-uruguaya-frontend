@@ -4,7 +4,7 @@ import Head from "next/head";
 import Footer from "../common/Footer";
 
 const LayoutWrapper = styled.div`
-  background: ${props => props.theme.colors.background2};
+  background: ${props => !props.whiteBackground ? props.theme.colors.background2 : props.theme.colors.background1};
 `;
 
 const Content = styled.div`
@@ -18,12 +18,12 @@ const Content = styled.div`
   }
 `;
 
-function Layout({ children }) {
+function Layout({ children, title, description, whiteBackground}) {
   return (
-    <LayoutWrapper>
+    <LayoutWrapper whiteBackground={whiteBackground}>
       <Head>
-        <title>Gestión de guardias | Médica Uruguaya</title>
-        <meta name="description" content="Gestión de guardias" />
+        <title>{title}</title>
+        <meta name="description" content={description} />
         <link
           rel="icon"
           type="image/icon"

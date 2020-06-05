@@ -43,7 +43,9 @@ html {
 }
 button:focus, input:focus {
   outline-style: solid;
-  outline-width: medium;
+  outline-width: thin;
+  outline-color: #214B8B;
+  border: 1px solid transparent;
 }
 `;
 

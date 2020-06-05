@@ -13,12 +13,24 @@ import Guards from "../common/Guards";
 const cookies = new Cookies();
 
 const Form = styled.form`
+  @media (max-width: 1200px) {
+    display: flex;
+    flex-direction: column;
+  }
   padding: 10px 0 0 0;
   button {
     width: 80px;
   }
   input {
     width: 130px;
+    @media (max-width: 1000px) {
+      margin: 0 0 30px 0;
+    }
+  }
+  > span > span {
+    @media (max-width: 1000px) {
+      top: -15px;
+    }
   }
 `;
 
@@ -88,7 +100,7 @@ function Edit({ id, onUpdate }) {
           setErrorDeleteMessage(process.ERROR);
           setSuccessDeleteMessage(null);
         }),
-      "delete-guard"
+      "delete"
     );
   }
 
@@ -139,6 +151,7 @@ function Edit({ id, onUpdate }) {
           <Form onSubmit={e => edit(e, user)}>
             <Input
               badge="Nombre"
+              autocomplete="on"
               name="username"
               type="text"
               value={user.username}
@@ -147,6 +160,7 @@ function Edit({ id, onUpdate }) {
             />
             <Input
               badge="Email"
+              autocomplete="on"
               name="email"
               type="text"
               value={user.email}
@@ -155,6 +169,7 @@ function Edit({ id, onUpdate }) {
             />
             <Input
               badge="Número"
+              autocomplete="on"
               name="number"
               type="text"
               value={user.number}
@@ -163,6 +178,7 @@ function Edit({ id, onUpdate }) {
             />
             <Input
               badge="Cédula"
+              autocomplete="on"
               name="ci"
               type="text"
               value={user.ci}
@@ -183,7 +199,7 @@ function Edit({ id, onUpdate }) {
             <EmptyMessage>No hay guardias</EmptyMessage>
           )}
           <Loader
-            area="delte-guard"
+            area="delete"
             success={successDeleteMessage}
             error={errorDeleteMessage}
           />

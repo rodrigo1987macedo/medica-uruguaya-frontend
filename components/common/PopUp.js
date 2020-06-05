@@ -4,10 +4,13 @@ import Buton from "../common/Button";
 import styled from "styled-components";
 
 const BaseModal = styled.div`
-  width: 700px;
   height: ${props => (props.small ? "260px" : "80vh")};
   overflow-y: scroll;
   padding: 5px;
+  width: 700px;
+    @media (max-width: 600px) {
+      width: 280px;
+    }
 `;
 
 function PopUp({

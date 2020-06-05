@@ -8,6 +8,7 @@ import Button from "../components/common/Button";
 import Input from "../components/common/Input";
 import Loader from "../components/common/Loader";
 import Title from "../components/common/Title";
+import Layout from "../components/common/Layout";
 
 const FormWrapper = styled.div`
   display: flex;
@@ -22,9 +23,12 @@ const FormWrapper = styled.div`
   > div {
     text-align: center;
     width: 400px;
-    border: 1px solid ${props => props.theme.colors.border2};
-    border-radius: 4px;
     padding: 30px 14px;
+    border-radius: 4px;
+    border: 1px solid ${props => props.theme.colors.border2};
+    @media (max-width: 600px) {
+      border: none;
+    }
   }
 `;
 
@@ -60,9 +64,11 @@ export default () => {
           }
         )
         .then(() => {
+          console.log("userIdentifier: ", userIdentifier);
           setEmailSent("Se ha enviado un mail a tu casilla de correo");
         })
         .catch(() => {
+          console.log("userIdentifier: ", userIdentifier);
           setErrorMessage("Error en el servidor");
         })
     );
@@ -105,38 +111,48 @@ export default () => {
   };
 
   return (
-    <FormWrapper>
-      <div>
-        <Title text="Ingresar" tag="h1" />
-        <form onSubmit={e => handleSubmit(e)}>
-          <div>
-            <Input
-              type="email"
-              badge="Email"
-              id="email"
-              name="email"
-              onChange={handleIdentifierChange}
-              value={userIdentifier}
-            />
-          </div>
-          <br />
-          <div>
-            <Input
-              type="password"
-              badge="Contraseña"
-              id="password"
-              name="password"
-              onChange={handlePasswordChange}
-              value={userPassword}
-            />
-          </div>
-          <br />
-          <Button text="Ingresar" />
-          <Forgot onClick={() => forgotPassword()}>Olvidé mi contraseña</Forgot>
-        </form>
-        <Loader error={errorMessage} success={emailSent} centered={true} />
-        <Logo src="logo.png" />
-      </div>
-    </FormWrapper>
+    <Layout
+      title="Ingresar a Gestión de guardias | Médica Uruguaya"
+      description="Ingresar sistema de gestión de guardias"
+      whiteBackground
+    >
+      <FormWrapper>
+        <div>
+          <Title text="Ingresar" tag="h1" />
+          <form onSubmit={e => handleSubmit(e)}>
+            <div>
+              <Input
+                type="email"
+                autocomplete="on"
+                badge="Email"
+                id="email"
+                name="email"
+                onChange={handleIdentifierChange}
+                value={userIdentifier}
+              />
+            </div>
+            <br />
+            <div>
+              <Input
+                type="password"
+                autocomplete="on"
+                badge="Contraseña"
+                id="password"
+                name="password"
+                onChange={handlePasswordChange}
+                value={userPassword}
+              />
+            </div>
+            <br />
+            <Button text="Ingresar" />
+            <Forgot onClick={() => forgotPassword()}>
+              Olvidé mi contraseña
+            </Forgot>
+          </form>
+          <Loader error={errorMessage} success={emailSent} centered={true} />
+          <Logo src="logo.png" />
+        </div>
+      </FormWrapper>
+    </Layout>
   );
 };

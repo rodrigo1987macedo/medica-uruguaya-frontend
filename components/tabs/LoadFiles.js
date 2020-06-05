@@ -56,7 +56,6 @@ function LoadFiles() {
   async function recursiveUploadChain(files) {
     const nextFile = files.shift();
     const nextFileIndex = loadedFilesLength - files.length - 1;
-    console.log('recursiveUploadChain files: ', nextFile)
     setIsLoading(true);
 
     function getUserNumber(file) {
@@ -65,6 +64,7 @@ function LoadFiles() {
 
     if (nextFile) {
       setLoadingStatus(nextFileIndex, status.PENDING);
+      let deleteError = false;
       return axios
         .get(
           `https://arcane-everglades-49934.herokuapp.com/users?number=${getUserNumber(
@@ -79,16 +79,18 @@ function LoadFiles() {
         .then(result => {
           result.data[0].file.map((item, index) => {
             if (index >= 3) {
-              axios.delete(
-                `https://arcane-everglades-49934.herokuapp.com/upload/files/${
-                  item._id
-                }`,
-                {
-                  headers: {
-                    Authorization: `Bearer ${cookies.get("guards")}`
+              axios
+                .delete(
+                  `https://arcane-everglades-49934.herokuapp.com/upload/files/${
+                    item._id
+                  }`,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${cookies.get("guards")}`
+                    }
                   }
-                }
-              );
+                )
+                .catch(() => (deleteError = true));
             }
           });
           if (result.data[0].id) {
@@ -109,7 +111,13 @@ function LoadFiles() {
                   }
                 }
               )
-              .then(() => setLoadingStatus(nextFileIndex, status.SUCCESS))
+              .then(() => {
+                if (deleteError) {
+                  setLoadingStatus(nextFileIndex, status.WARNING);
+                } else {
+                  setLoadingStatus(nextFileIndex, status.SUCCESS);
+                }
+              })
               .catch(() => setLoadingStatus(nextFileIndex, status.ERROR))
               .finally(() => recursiveUploadChain(files));
           }
